@@ -1,0 +1,442 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import { CELLS, COLS, DEPTH_LEVELS, ROWS } from '#lib/helmet-cells.ts';
+	import { getDurbanWeather, nextWeatherRefreshMs, type WeatherCue } from '#lib/weather.ts';
+
+	const TTL_MS = 3 * 60 * 60 * 1000;
+	const CELL_W = 7.4;
+	const CELL_H = 11;
+	const MAX_YAW = 0.18;
+	const MAX_PITCH = 0.14;
+	const LERP = 0.1;
+	const PERSPECTIVE = 0.28;
+	const DEPTH_SCALE = 0.78;
+	const PIVOT = 0.2;
+	/** Visor only. Flat block fills, light to solid. The shell keeps the PNG letters. */
+	const VISOR_BLOCK: Record<string, string> = { '+': '▒', '*': '▓', '#': '█' };
+	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
+	const OFF_RGB = [0xd0, 0xcc, 0xbe] as const;
+	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
+	const DEPTH_SPAN = Math.max(1, DEPTH_LEVELS - 1);
+	/** Crease strength tuned at a span of 99. Hold that shade when the span changes. */
+	const CREASE = (40 * DEPTH_SPAN) / 99;
+
+	const sunDots = [
+		{ x: 0.24, y: 0.4, d: 1.1, delay: 0 },
+		{ x: 0.3, y: 0.28, d: 0.9, delay: 1.2 },
+		{ x: 0.72, y: 0.32, d: 1.1, delay: 0.4 },
+		{ x: 0.78, y: 0.46, d: 0.8, delay: 2 },
+		{ x: 0.22, y: 0.52, d: 1, delay: 0.8 },
+		{ x: 0.48, y: 0.18, d: 0.7, delay: 1.6 },
+		{ x: 0.36, y: 0.62, d: 0.9, delay: 2.4 },
+		{ x: 0.64, y: 0.64, d: 1.1, delay: 0.2 }
+	];
+
+	const rainStreaks = [
+		{ x: 0.34, y: 0.24, h: 0.18, delay: 0 },
+		{ x: 0.4, y: 0.2, h: 0.22, delay: 0.4 },
+		{ x: 0.46, y: 0.28, h: 0.16, delay: 0.9 },
+		{ x: 0.52, y: 0.22, h: 0.2, delay: 0.2 },
+		{ x: 0.58, y: 0.26, h: 0.18, delay: 1.1 },
+		{ x: 0.37, y: 0.32, h: 0.14, delay: 0.6 },
+		{ x: 0.55, y: 0.34, h: 0.16, delay: 1.4 },
+		{ x: 0.44, y: 0.18, h: 0.24, delay: 0.3 }
+	];
+
+	let cue = $state<WeatherCue | null>(null);
+	let stage: HTMLDivElement | undefined;
+	let canvas: HTMLCanvasElement | undefined;
+
+	const hexRgb = (hex: string) => {
+		const n = parseInt(hex.slice(1), 16);
+		return [(n >> 16) & 255, (n >> 8) & 255, n & 255] as const;
+	};
+
+	const paletteRgb = PALETTE.map(hexRgb);
+
+	const zAt = new Int16Array(COLS * ROWS).fill(-1);
+	const kindAt = new Int8Array(COLS * ROWS).fill(-1);
+	for (const cell of CELLS) {
+		const i = cell.r * COLS + cell.c;
+		zAt[i] = cell.z;
+		kindAt[i] = cell.k;
+	}
+
+	/** One-cell visor lip. Glass only, so the shell outline stays untouched. */
+	const fringe = CELLS.map((cell) => {
+		if (cell.k < 2) return false;
+		for (const [dc, dr] of [
+			[1, 0],
+			[-1, 0],
+			[0, 1],
+			[0, -1]
+		] as const) {
+			const c = cell.c + dc;
+			const r = cell.r + dr;
+			if (c < 0 || r < 0 || c >= COLS || r >= ROWS) return true;
+			if (kindAt[r * COLS + c] < 2) return true;
+		}
+		return false;
+	});
+
+	/** How far a shell cell sits behind its neighbors. Crease darkening only. */
+	const relief = CELLS.map((cell) => {
+		let behind = 0;
+		for (const [dc, dr] of [
+			[1, 0],
+			[-1, 0],
+			[0, 1],
+			[0, -1]
+		] as const) {
+			const c = cell.c + dc;
+			const r = cell.r + dr;
+			if (c < 0 || r < 0 || c >= COLS || r >= ROWS) continue;
+			const nz = zAt[r * COLS + c];
+			if (nz < 0) continue;
+			behind = Math.max(behind, cell.z - nz);
+		}
+		return behind;
+	});
+
+	const rgbCss = (rgb: readonly number[], shade: number) => {
+		const s = Math.max(0.58, Math.min(1, shade));
+		return `rgb(${(rgb[0] * s) | 0},${(rgb[1] * s) | 0},${(rgb[2] * s) | 0})`;
+	};
+
+	const visorBox = (() => {
+		let minC = COLS;
+		let maxC = 0;
+		let minR = ROWS;
+		let maxR = 0;
+		for (const cell of CELLS) {
+			if (cell.k !== 2 && cell.k !== 3) continue;
+			if (cell.c < minC) minC = cell.c;
+			if (cell.c > maxC) maxC = cell.c;
+			if (cell.r < minR) minR = cell.r;
+			if (cell.r > maxR) maxR = cell.r;
+		}
+		return { minC, maxC, minR, maxR };
+	})();
+
+	/** Thin-film across the visor opening. The lip is the same palette, one step along. */
+	const visorRgb = (c: number, r: number, t: number, yaw: number, lip: boolean, shift = 0) => {
+		const u = (c - visorBox.minC) / Math.max(1, visorBox.maxC - visorBox.minC);
+		const v = (r - visorBox.minR) / Math.max(1, visorBox.maxR - visorBox.minR);
+		const lipShift = lip ? 0.16 + yaw * 0.4 : 0;
+		const s = ((u * 0.84 + v * 0.1 + t * 0.07 + yaw * 0.35 + lipShift + shift) % 1 + 1) % 1;
+		const x = s * (paletteRgb.length - 1);
+		const i = Math.min(paletteRgb.length - 2, Math.floor(x));
+		const f = x - i;
+		const a = paletteRgb[i];
+		const b = paletteRgb[i + 1];
+		return [
+			(a[0] + (b[0] - a[0]) * f) | 0,
+			(a[1] + (b[1] - a[1]) * f) | 0,
+			(a[2] + (b[2] - a[2]) * f) | 0
+		] as const;
+	};
+
+	onMount(() => {
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+		let tx = 0;
+		let ty = 0;
+		let yaw = 0;
+		let pitch = 0;
+		let raf = 0;
+		let weatherTimer = 0;
+		let start = performance.now();
+		let revealAt = 0;
+		let revealWatch: MutationObserver | undefined;
+		const visorC = (visorBox.minC + visorBox.maxC) / 2;
+		const visorR = (visorBox.minR + visorBox.maxR) / 2;
+
+		const armReveal = () => {
+			if (revealAt !== 0) return;
+			revealAt = performance.now();
+		};
+
+		if (reduce.matches) {
+			revealAt = performance.now() - 4000;
+		} else {
+			const pre = document.querySelector('.preloader');
+			if (!pre || pre.classList.contains('out')) armReveal();
+			else {
+				revealWatch = new MutationObserver(() => {
+					if (pre.classList.contains('out')) {
+						revealWatch?.disconnect();
+						armReveal();
+					}
+				});
+				revealWatch.observe(pre, { attributes: true, attributeFilter: ['class'] });
+			}
+		}
+
+		/** Visor fills from its center, then the shell grows out from the opening. */
+		const appear = (k: number, c: number, r: number, now: number) => {
+			if (revealAt === 0) return 0;
+			const elapsed = (now - revealAt) / 1000;
+			const dist = Math.min(1, Math.hypot(c - visorC, r - visorR) / 34);
+			const visor = k >= 2;
+			const start = visor ? dist * 0.2 : 0.46 + dist * 0.42;
+			const dur = visor ? 0.34 : 0.28;
+			const x = (elapsed - start) / dur;
+			if (x <= 0) return 0;
+			if (x >= 1) return 1;
+			return x * x * (3 - 2 * x);
+		};
+
+		const rest = () => {
+			tx = 0;
+			ty = 0;
+		};
+
+		const move = (event: PointerEvent) => {
+			if (reduce.matches || event.pointerType !== 'mouse' || !stage) {
+				rest();
+				return;
+			}
+			const box = stage.getBoundingClientRect();
+			const nx = ((event.clientX - box.left) / box.width) * 2 - 1;
+			const ny = ((event.clientY - box.top) / box.height) * 2 - 1;
+			tx = Math.max(-1, Math.min(1, nx)) * MAX_YAW;
+			ty = Math.max(-1, Math.min(1, -ny)) * MAX_PITCH;
+		};
+
+		const draw = (now: number) => {
+			if (!canvas || !stage) return;
+			const ctx = canvas.getContext('2d');
+			if (!ctx) return;
+
+			const dpr = Math.min(2, window.devicePixelRatio || 1);
+			const cssW = stage.clientWidth;
+			const cssH = cssW * ((ROWS * CELL_H) / (COLS * CELL_W));
+			if (canvas.width !== Math.round(cssW * dpr) || canvas.height !== Math.round(cssH * dpr)) {
+				canvas.width = Math.round(cssW * dpr);
+				canvas.height = Math.round(cssH * dpr);
+				canvas.style.width = `${cssW}px`;
+				canvas.style.height = `${cssH}px`;
+			}
+
+			yaw += (tx - yaw) * LERP;
+			pitch += (ty - pitch) * LERP;
+			if (reduce.matches) {
+				yaw = 0;
+				pitch = 0;
+			}
+
+			const t = reduce.matches ? 0 : (now - start) / 1000;
+			const cyA = Math.cos(yaw);
+			const syA = Math.sin(yaw);
+			const cp = Math.cos(pitch);
+			const sp = Math.sin(pitch);
+			const cx = COLS / 2;
+			const cyG = ROWS / 2;
+			const scaleX = canvas.width / COLS;
+			const scaleY = canvas.height / ROWS;
+			const fontPx = Math.max(8, scaleY * 0.92);
+
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.font = `${fontPx}px ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace`;
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'middle';
+
+			type Drawn = {
+				ch: string;
+				k: number;
+				c: number;
+				r: number;
+				px: number;
+				py: number;
+				depth: number;
+				z01: number;
+				behind: number;
+				lip: boolean;
+			};
+			const drawn: Drawn[] = [];
+
+			for (let i = 0; i < CELLS.length; i++) {
+				const cell = CELLS[i];
+				const x = (cell.c + 0.5 - cx) / cx;
+				const y = -(cell.r + 0.5 - cyG) / cyG;
+				const z01 = cell.z / DEPTH_SPAN;
+				const z = (PIVOT - z01) * DEPTH_SCALE;
+				const x1 = x * cyA + z * syA;
+				const z1 = -x * syA + z * cyA;
+				const y1 = y * cp - z1 * sp;
+				const z2 = y * sp + z1 * cp;
+				const w = 1 / (1 - z2 * PERSPECTIVE);
+				const px = (cx + x1 * w * cx) * scaleX;
+				const py = (cyG - y1 * w * cyG) * scaleY;
+				if (px < -12 || py < -12 || px > canvas.width + 12 || py > canvas.height + 12) continue;
+				drawn.push({
+					ch: cell.ch,
+					k: cell.k,
+					c: cell.c,
+					r: cell.r,
+					px,
+					py,
+					depth: -z2,
+					z01,
+					behind: relief[i],
+					lip: fringe[i]
+				});
+			}
+
+			drawn.sort((a, b) => b.depth - a.depth);
+			const reach2 = (fontPx * 0.62) ** 2;
+			const coverAt = (x: number, y: number) => {
+				let best: Drawn | null = null;
+				let bestD = reach2;
+				for (const glyph of drawn) {
+					const dx = glyph.px - x;
+					const dy = glyph.py - y;
+					const d = dx * dx + dy * dy;
+					if (d < bestD) {
+						bestD = d;
+						best = glyph;
+					}
+				}
+				return best;
+			};
+			/** In front of shell glyphs. Never on the visor. Open air around the helmet still shows. */
+			const weatherShows = (x: number, y: number, wZ: number) => {
+				const glyph = coverAt(x, y);
+				if (!glyph) return true;
+				if (glyph.k >= 2) return false;
+				return glyph.z01 > wZ;
+			};
+
+			for (const glyph of drawn) {
+				const alpha = appear(glyph.k, glyph.c, glyph.r, now);
+				if (alpha <= 0) continue;
+				ctx.globalAlpha = alpha;
+				if (glyph.k >= 2) {
+					const rgb = visorRgb(glyph.c, glyph.r, t, yaw, glyph.lip);
+					ctx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+					ctx.fillText(VISOR_BLOCK[glyph.ch] ?? '▓', glyph.px, glyph.py);
+				} else {
+					const shade = 1 - glyph.z01 * 0.34 - Math.min(0.2, glyph.behind / CREASE);
+					ctx.fillStyle = rgbCss(glyph.k === 1 ? OFF_RGB : CREAM_RGB, shade);
+					ctx.fillText(glyph.ch, glyph.px, glyph.py);
+				}
+			}
+			ctx.globalAlpha = 1;
+
+			const settled = reduce.matches || (revealAt > 0 && (now - revealAt) / 1000 > 1.05);
+			if (settled && cue === 'sun') {
+				for (const dot of sunDots) {
+					const x = dot.x * canvas.width;
+					const y = dot.y * canvas.height;
+					if (!weatherShows(x, y, 0.14)) continue;
+					const pulse = reduce.matches
+						? 0.5
+						: 0.35 + 0.35 * Math.sin((t + dot.delay) * 0.9);
+					ctx.fillStyle = `rgba(193,141,93,${pulse})`;
+					ctx.beginPath();
+					ctx.arc(x, y, dot.d * dpr * 1.2, 0, Math.PI * 2);
+					ctx.fill();
+				}
+			} else if (settled && cue === 'rain') {
+				ctx.strokeStyle = 'rgba(244,243,232,0.35)';
+				ctx.lineWidth = 0.8 * dpr;
+				for (const drop of rainStreaks) {
+					const p = reduce.matches ? 0.4 : ((t + drop.delay) % 1.8) / 1.8;
+					const x0 = drop.x * canvas.width;
+					const y0 = (drop.y + p * 0.12) * canvas.height;
+					const x1 = x0 + 1.2 * dpr;
+					const y1 = y0 + drop.h * canvas.height;
+					ctx.beginPath();
+					let drawing = false;
+					for (let step = 0; step <= 8; step++) {
+						const u = step / 8;
+						const x = x0 + (x1 - x0) * u;
+						const y = y0 + (y1 - y0) * u;
+						if (weatherShows(x, y, 0.2)) {
+							if (!drawing) {
+								ctx.moveTo(x, y);
+								drawing = true;
+							} else ctx.lineTo(x, y);
+						} else {
+							drawing = false;
+						}
+					}
+					ctx.stroke();
+				}
+			} else if (settled && cue === 'overcast') {
+				ctx.fillStyle = 'rgba(147,158,122,0.16)';
+				const ox = canvas.width * 0.5;
+				const oy = canvas.height * 0.44;
+				const rx = canvas.width * 0.28;
+				const ry = canvas.height * 0.3;
+				for (const glyph of drawn) {
+					if (glyph.k >= 2 || glyph.z01 < 0.12) continue;
+					const nx = (glyph.px - ox) / rx;
+					const ny = (glyph.py - oy) / ry;
+					if (nx * nx + ny * ny > 1) continue;
+					ctx.fillRect(glyph.px - fontPx * 0.32, glyph.py - fontPx * 0.42, fontPx * 0.64, fontPx * 0.84);
+				}
+			}
+
+			raf = requestAnimationFrame(draw);
+		};
+
+		const down = (event: PointerEvent) => {
+			if (event.pointerType !== 'mouse') rest();
+		};
+
+		const loadWeather = async () => {
+			try {
+				const weather = await getDurbanWeather();
+				cue = weather.cue;
+			} catch {
+				/* keep last cue */
+			}
+			window.clearTimeout(weatherTimer);
+			weatherTimer = window.setTimeout(loadWeather, nextWeatherRefreshMs() || TTL_MS);
+		};
+
+		draw(performance.now());
+		loadWeather();
+		window.addEventListener('pointermove', move);
+		window.addEventListener('pointerdown', down);
+		document.documentElement.addEventListener('mouseleave', rest);
+
+		return () => {
+			revealWatch?.disconnect();
+			cancelAnimationFrame(raf);
+			window.clearTimeout(weatherTimer);
+			window.removeEventListener('pointermove', move);
+			window.removeEventListener('pointerdown', down);
+			document.documentElement.removeEventListener('mouseleave', rest);
+		};
+	});
+</script>
+
+<div bind:this={stage} class="stage" aria-hidden="true">
+	<canvas bind:this={canvas} class="helmet"></canvas>
+</div>
+
+<style>
+	.stage,
+	.helmet {
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
+		-webkit-touch-callout: none;
+		-webkit-user-drag: none;
+	}
+
+	.stage {
+		position: relative;
+		width: min(24rem, 72%);
+		margin: 1.25rem auto 0.5rem;
+		pointer-events: none;
+	}
+
+	.helmet {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+</style>

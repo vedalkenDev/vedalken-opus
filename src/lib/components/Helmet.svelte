@@ -16,10 +16,10 @@
 	const VISOR_BLOCK: Record<string, string> = { '+': '▒', '*': '▓', '#': '█' };
 	/** Shell fill. No █ — that read as white squares on cream. Letters stay on the silhouette and visor opening. */
 	const SHELL_BLOCK: Record<string, string> = {
-		':': '░',
-		'-': '░',
+		':': '▒',
+		'-': '▒',
 		'=': '▒',
-		'+': '▒',
+		'+': '▓',
 		'*': '▓',
 		'#': '▓'
 	};
@@ -125,8 +125,8 @@
 		return behind;
 	});
 
-	const rgbCss = (rgb: readonly number[], shade: number) => {
-		const s = Math.max(0.58, Math.min(1, shade));
+	const rgbCss = (rgb: readonly number[], shade: number, floor = 0.58) => {
+		const s = Math.max(floor, Math.min(1, shade));
 		return `rgb(${(rgb[0] * s) | 0},${(rgb[1] * s) | 0},${(rgb[2] * s) | 0})`;
 	};
 
@@ -345,8 +345,11 @@
 					ctx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 					ctx.fillText(VISOR_BLOCK[glyph.ch] ?? '▓', glyph.px, glyph.py);
 				} else {
-					const shade = 1 - glyph.z01 * 0.34 - Math.min(0.2, glyph.behind / CREASE);
-					ctx.fillStyle = rgbCss(glyph.k === 1 ? OFF_RGB : CREAM_RGB, shade);
+					const off = glyph.k === 1;
+					const shade = off
+						? 0.96 - glyph.z01 * 0.16 - Math.min(0.1, glyph.behind / CREASE)
+						: 1 - glyph.z01 * 0.3 - Math.min(0.18, glyph.behind / CREASE);
+					ctx.fillStyle = rgbCss(off ? OFF_RGB : CREAM_RGB, shade, off ? 0.78 : 0.62);
 					const ch = glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▒');
 					ctx.fillText(ch, glyph.px, glyph.py);
 				}

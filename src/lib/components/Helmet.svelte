@@ -12,8 +12,17 @@
 	const PERSPECTIVE = 0.28;
 	const DEPTH_SCALE = 0.78;
 	const PIVOT = 0.2;
-	/** Visor only. Flat block fills, light to solid. The shell keeps the PNG letters. */
+	/** Visor fill. Light to solid. */
 	const VISOR_BLOCK: Record<string, string> = { '+': '▒', '*': '▓', '#': '█' };
+	/** Shell fill. No █ — that read as white squares on cream. Letters stay on the silhouette and visor opening. */
+	const SHELL_BLOCK: Record<string, string> = {
+		':': '░',
+		'-': '░',
+		'=': '▒',
+		'+': '▒',
+		'*': '▓',
+		'#': '▓'
+	};
 	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
 	const OFF_RGB = [0xd0, 0xcc, 0xbe] as const;
 	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
@@ -75,6 +84,24 @@
 			const r = cell.r + dr;
 			if (c < 0 || r < 0 || c >= COLS || r >= ROWS) return true;
 			if (kindAt[r * COLS + c] < 2) return true;
+		}
+		return false;
+	});
+
+	/** Shell silhouette and visor opening. Letters only here. Fill is blocks. */
+	const rim = CELLS.map((cell) => {
+		if (cell.k >= 2) return false;
+		for (const [dc, dr] of [
+			[1, 0],
+			[-1, 0],
+			[0, 1],
+			[0, -1]
+		] as const) {
+			const c = cell.c + dc;
+			const r = cell.r + dr;
+			if (c < 0 || r < 0 || c >= COLS || r >= ROWS) return true;
+			const nk = kindAt[r * COLS + c];
+			if (nk < 0 || nk >= 2) return true;
 		}
 		return false;
 	});
@@ -252,6 +279,7 @@
 				z01: number;
 				behind: number;
 				lip: boolean;
+				rim: boolean;
 			};
 			const drawn: Drawn[] = [];
 
@@ -279,7 +307,8 @@
 					depth: -z2,
 					z01,
 					behind: relief[i],
-					lip: fringe[i]
+					lip: fringe[i],
+					rim: rim[i]
 				});
 			}
 
@@ -318,7 +347,8 @@
 				} else {
 					const shade = 1 - glyph.z01 * 0.34 - Math.min(0.2, glyph.behind / CREASE);
 					ctx.fillStyle = rgbCss(glyph.k === 1 ? OFF_RGB : CREAM_RGB, shade);
-					ctx.fillText(glyph.ch, glyph.px, glyph.py);
+					const ch = glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▒');
+					ctx.fillText(ch, glyph.px, glyph.py);
 				}
 			}
 			ctx.globalAlpha = 1;

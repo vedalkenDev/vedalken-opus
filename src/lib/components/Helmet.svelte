@@ -23,6 +23,8 @@
 		'*': '▓',
 		'#': '▓'
 	};
+	/** Off-white cheeks recede: denser near the visor, sparser toward the silhouette. Same cell size. */
+	const OFF_FALL = ['▒', '░', ':', '.'] as const;
 	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
 	const OFF_RGB = [0xd0, 0xcc, 0xbe] as const;
 	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
@@ -346,12 +348,23 @@
 					ctx.fillText(VISOR_BLOCK[glyph.ch] ?? '▓', glyph.px, glyph.py);
 				} else {
 					const off = glyph.k === 1;
-					const shade = off
-						? 0.96 - glyph.z01 * 0.16 - Math.min(0.1, glyph.behind / CREASE)
-						: 1 - glyph.z01 * 0.3 - Math.min(0.18, glyph.behind / CREASE);
-					ctx.fillStyle = rgbCss(off ? OFF_RGB : CREAM_RGB, shade, off ? 0.78 : 0.62);
-					const ch = glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▒');
-					ctx.fillText(ch, glyph.px, glyph.py);
+					const side = Math.abs(glyph.c + 0.5 - cx) / cx;
+					const recede = Math.min(1, Math.max(0, glyph.z01 * 0.7 + side * 0.42 - 0.12));
+					if (off) {
+						const shade =
+							0.8 - recede * 0.5 - Math.min(0.12, glyph.behind / CREASE);
+						ctx.fillStyle = rgbCss(OFF_RGB, shade, 0.32);
+						const ch = glyph.rim
+							? glyph.ch
+							: OFF_FALL[Math.min(OFF_FALL.length - 1, (recede * OFF_FALL.length) | 0)];
+						ctx.fillText(ch, glyph.px, glyph.py);
+					} else {
+						const shade =
+							1 - glyph.z01 * 0.2 - Math.min(0.12, glyph.behind / CREASE);
+						ctx.fillStyle = rgbCss(CREAM_RGB, shade, 0.74);
+						const ch = glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▒');
+						ctx.fillText(ch, glyph.px, glyph.py);
+					}
 				}
 			}
 			ctx.globalAlpha = 1;

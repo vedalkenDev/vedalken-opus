@@ -14,7 +14,7 @@
 	const PIVOT = 0.2;
 	/** Visor fill. Light to solid. */
 	const VISOR_BLOCK: Record<string, string> = { '+': '▒', '*': '▓', '#': '█' };
-	/** Shell fill. No █ — that read as white squares on cream. Letters stay on the silhouette and visor opening. */
+	/** Cream shell fill. No █ — that read as white squares on cream. Letters stay on the silhouette and visor opening. */
 	const SHELL_BLOCK: Record<string, string> = {
 		':': '▒',
 		'-': '▒',
@@ -23,8 +23,15 @@
 		'*': '▓',
 		'#': '▓'
 	};
+	/** Charcoal side/neck fill. █ is fine on dark gray. */
+	const GRAY_BLOCK: Record<string, string> = {
+		'+': '▒',
+		'*': '▓',
+		'#': '█',
+		'%': '█'
+	};
 	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
-	const OFF_RGB = [0xd0, 0xcc, 0xbe] as const;
+	const GRAY_RGB = [0x24, 0x2a, 0x30] as const;
 	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
 	const DEPTH_SPAN = Math.max(1, DEPTH_LEVELS - 1);
 	/** Crease strength tuned at a span of 99. Hold that shade when the span changes. */
@@ -344,16 +351,13 @@
 					const rgb = visorRgb(glyph.c, glyph.r, t, yaw, glyph.lip);
 					ctx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 					ctx.fillText(VISOR_BLOCK[glyph.ch] ?? '▓', glyph.px, glyph.py);
+				} else if (glyph.k === 1) {
+					ctx.fillStyle = rgbCss(GRAY_RGB, 1 - glyph.z01 * 0.1, 0.88);
+					ctx.fillText(glyph.rim ? glyph.ch : (GRAY_BLOCK[glyph.ch] ?? '▓'), glyph.px, glyph.py);
 				} else {
-					const off = glyph.k === 1;
-					if (off) {
-						ctx.fillStyle = rgbCss(OFF_RGB, 0.8, 0.8);
-						ctx.fillText(glyph.rim ? glyph.ch : '▓', glyph.px, glyph.py);
-					} else {
-						const shade = 1 - glyph.z01 * 0.22 - Math.min(0.14, glyph.behind / CREASE);
-						ctx.fillStyle = rgbCss(CREAM_RGB, shade, 0.76);
-						ctx.fillText(glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▓'), glyph.px, glyph.py);
-					}
+					const shade = 1 - glyph.z01 * 0.22 - Math.min(0.14, glyph.behind / CREASE);
+					ctx.fillStyle = rgbCss(CREAM_RGB, shade, 0.76);
+					ctx.fillText(glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▓'), glyph.px, glyph.py);
 				}
 			}
 			ctx.globalAlpha = 1;

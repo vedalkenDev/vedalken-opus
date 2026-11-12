@@ -346,12 +346,14 @@
 					ctx.fillText(VISOR_BLOCK[glyph.ch] ?? '▓', glyph.px, glyph.py);
 				} else {
 					const off = glyph.k === 1;
-					const shade = off
-						? 0.96 - glyph.z01 * 0.16 - Math.min(0.1, glyph.behind / CREASE)
-						: 1 - glyph.z01 * 0.3 - Math.min(0.18, glyph.behind / CREASE);
-					ctx.fillStyle = rgbCss(off ? OFF_RGB : CREAM_RGB, shade, off ? 0.78 : 0.62);
-					const ch = glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▒');
-					ctx.fillText(ch, glyph.px, glyph.py);
+					if (off) {
+						ctx.fillStyle = rgbCss(OFF_RGB, 0.8, 0.8);
+						ctx.fillText(glyph.rim ? glyph.ch : '▓', glyph.px, glyph.py);
+					} else {
+						const shade = 1 - glyph.z01 * 0.22 - Math.min(0.14, glyph.behind / CREASE);
+						ctx.fillStyle = rgbCss(CREAM_RGB, shade, 0.76);
+						ctx.fillText(glyph.rim ? glyph.ch : (SHELL_BLOCK[glyph.ch] ?? '▓'), glyph.px, glyph.py);
+					}
 				}
 			}
 			ctx.globalAlpha = 1;

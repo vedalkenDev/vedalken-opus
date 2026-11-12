@@ -33,6 +33,8 @@
 	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
 	const GRAY_RGB = [0x24, 0x2a, 0x30] as const;
 	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
+	/** Seconds for one full visor loop: violet → blue → teal → olive → amber → coral → violet. */
+	const VISOR_CYCLE = 10;
 	const DEPTH_SPAN = Math.max(1, DEPTH_LEVELS - 1);
 	/** Crease strength tuned at a span of 99. Hold that shade when the span changes. */
 	const CREASE = (40 * DEPTH_SPAN) / 99;
@@ -152,12 +154,13 @@
 		return { minC, maxC, minR, maxR };
 	})();
 
-	/** Thin-film across the visor opening. The lip is the same palette, one step along. */
-	const visorRgb = (c: number, r: number, t: number, yaw: number, lip: boolean, shift = 0) => {
+	/** Traveling thin-film. Glyphs stay put; only the sample walks the looped palette. */
+	const visorRgb = (c: number, r: number, t: number, yaw: number, lip: boolean) => {
 		const u = (c - visorBox.minC) / Math.max(1, visorBox.maxC - visorBox.minC);
 		const v = (r - visorBox.minR) / Math.max(1, visorBox.maxR - visorBox.minR);
-		const lipShift = lip ? 0.16 + yaw * 0.4 : 0;
-		const s = ((u * 0.84 + v * 0.1 + t * 0.07 + yaw * 0.35 + lipShift + shift) % 1 + 1) % 1;
+		const field = u * 0.22 + v * 0.4 + Math.sin((u * 2.3 + v * 1.7) * Math.PI) * 0.1;
+		const lipShift = lip ? 0.12 : 0;
+		const s = ((field + t / VISOR_CYCLE + yaw * 0.1 + lipShift) % 1 + 1) % 1;
 		const x = s * (paletteRgb.length - 1);
 		const i = Math.min(paletteRgb.length - 2, Math.floor(x));
 		const f = x - i;

@@ -76,7 +76,6 @@
 
 	.word {
 		border-bottom: 1px dotted currentColor;
-		cursor: default;
 		font: inherit;
 		color: inherit;
 	}

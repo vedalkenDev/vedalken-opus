@@ -134,7 +134,6 @@
 		font: inherit;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		cursor: pointer;
 	}
 
 	button:hover,

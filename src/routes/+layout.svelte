@@ -69,56 +69,60 @@
 	@media (hover: hover) and (pointer: fine) {
 		@media (prefers-reduced-motion: no-preference) {
 			:global(html) {
-				cursor: url('/cursors/default.png') 1 1, auto;
+				cursor: url('/cursors/default.png') 10 10, auto;
 			}
 
 			:global(a[href]) {
-				cursor: url('/cursors/pointer.png') 6 1, pointer;
+				cursor: url('/cursors/pointer.png') 10 10, pointer;
 			}
 
 			:global(a[href]:active) {
-				cursor: url('/cursors/click.png') 2 2, pointer;
+				cursor: url('/cursors/click.png') 10 10, pointer;
 			}
 
 			:global(button),
 			:global([type='submit']),
 			:global([type='button']),
 			:global([role='button']) {
-				cursor: url('/cursors/hover.png') 1 1, pointer;
+				cursor: url('/cursors/hover.png') 10 10, pointer;
 			}
 
 			:global(button:active),
 			:global([type='submit']:active),
 			:global([type='button']:active),
 			:global([role='button']:active) {
-				cursor: url('/cursors/click.png') 2 2, pointer;
+				cursor: url('/cursors/click.png') 10 10, pointer;
 			}
 
 			:global(input:not([type='submit']):not([type='button']):not([type='checkbox']):not([type='radio'])),
 			:global(textarea),
 			:global([contenteditable='true']),
 			:global(main p) {
-				cursor: url('/cursors/text.png') 3 7, text;
+				cursor: url('/cursors/text.png') 6 10, text;
 			}
 
 			:global(img),
 			:global(canvas) {
-				cursor: url('/cursors/highlight.png') 11 9, crosshair;
+				cursor: url('/cursors/highlight.png') 15 15, crosshair;
 			}
 
 			:global(a.pak),
 			:global(a.pak *) {
-				cursor: url('/cursors/grab.png') 9 8, grab;
+				cursor: url('/cursors/grab.png') 10 10, grab;
 			}
 
 			:global(a.pak:active),
 			:global(a.pak:active *) {
-				cursor: url('/cursors/grabbing.png') 8 6, grabbing;
+				cursor: url('/cursors/grabbing.png') 10 10, grabbing;
 			}
 
 			:global(html :disabled),
 			:global(html [aria-disabled='true']) {
-				cursor: url('/cursors/disabled.png') 8 8, not-allowed;
+				cursor: url('/cursors/disabled.png') 10 10, not-allowed;
+			}
+
+			:global([aria-busy='true']) {
+				cursor: url('/cursors/wait.png') 10 10, wait;
 			}
 		}
 	}

@@ -13,7 +13,15 @@
 <div class="cover">
 	<CartShot cover={project.cover} />
 </div>
-<p>{project.summary}</p>
+{#if project.features?.length}
+	<ul class="features">
+		{#each project.features as line}
+			<li>{line}</li>
+		{/each}
+	</ul>
+{:else}
+	<p>{project.summary}</p>
+{/if}
 
 {#if project.liveUrl || project.githubUrl}
 	<p class="links">
@@ -57,6 +65,25 @@
 		padding: 0.45rem;
 		border: 1px solid color-mix(in srgb, var(--cream) 22%, transparent);
 		background: color-mix(in srgb, var(--cream) 4%, var(--ground));
+	}
+
+	.features {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 0.45rem;
+	}
+
+	.features li {
+		display: flex;
+		gap: 0.55rem;
+	}
+
+	.features li::before {
+		content: '>';
+		opacity: 0.45;
+		flex-shrink: 0;
 	}
 
 	.links {

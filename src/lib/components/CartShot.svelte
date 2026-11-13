@@ -8,6 +8,7 @@
 	let canvas: HTMLCanvasElement | undefined;
 
 	const paint = () => {
+		if (cover.art) return;
 		if (!host || !canvas) return;
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
@@ -51,6 +52,7 @@
 	});
 
 	onMount(() => {
+		if (cover.art) return;
 		const observer = new ResizeObserver(() => paint());
 		if (host) observer.observe(host);
 		paint();
@@ -59,7 +61,11 @@
 </script>
 
 <div class="host" bind:this={host}>
-	<canvas bind:this={canvas} aria-hidden="true"></canvas>
+	{#if cover.art}
+		<img src={cover.art} alt="" />
+	{:else}
+		<canvas bind:this={canvas} aria-hidden="true"></canvas>
+	{/if}
 </div>
 
 <style>
@@ -68,13 +74,20 @@
 		width: 100%;
 		height: 100%;
 		min-height: 0;
+		overflow: hidden;
 	}
 
-	canvas {
+	canvas,
+	img {
 		position: absolute;
 		inset: 0;
 		display: block;
 		width: 100%;
 		height: 100%;
+	}
+
+	img {
+		object-fit: cover;
+		object-position: center;
 	}
 </style>

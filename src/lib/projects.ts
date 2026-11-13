@@ -14,6 +14,7 @@ export type Project = {
 	cover: CartCover;
 	liveUrl?: string;
 	githubUrl?: string;
+	features?: string[];
 	stills?: ProjectStill[];
 };
 
@@ -44,10 +45,17 @@ export const projects: Project[] = [
 		title: 'ASCII image generator',
 		year: '2026',
 		summary:
-			'Four looks: Visor, Blocks, CRT amber, and ANSI. Download PNG, WebP, or JPEG. Copy text and copy image. SVG opens through in-process resvg on desktop and web, long side capped at 2048px. The web build is the same app compiled to wasm.',
+			'Four looks: Visor, Blocks, CRT amber, and ANSI. Download PNG, WebP, or JPEG. COPY TEXT and COPY IMAGE. SVG opens through in-process resvg on desktop and web, long side capped at 2048px. The web build is the same app compiled to wasm.',
 		cover: cartCovers['ascii-image-generator'],
 		liveUrl: 'https://vedalkendev.github.io/ascii-image-generator/',
 		githubUrl: 'https://github.com/vedalkenDev/ascii-image-generator',
+		features: [
+			'Looks: Visor, Blocks, CRT amber, ANSI.',
+			'Download PNG, WebP, or JPEG.',
+			'COPY TEXT and COPY IMAGE.',
+			'SVG opens through in-process resvg on desktop and web, long side capped at 2048px.',
+			'The web build is the same app compiled to wasm.'
+		],
 		stills: [
 			{
 				before: '/work/ascii-image-generator/before-eagle.jpg',

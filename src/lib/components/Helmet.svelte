@@ -420,7 +420,13 @@
 				}
 			}
 
-			drawn.sort((a, b) => b.depth - a.depth);
+			// Glass last: overlapping shell/rim glyphs stay behind the visor (painter layers).
+			drawn.sort((a, b) => {
+				const ga = a.k >= 2 ? 1 : 0;
+				const gb = b.k >= 2 ? 1 : 0;
+				if (ga !== gb) return ga - gb;
+				return b.depth - a.depth;
+			});
 			const reach2 = (fontPx * 0.62) ** 2;
 			const coverAt = (x: number, y: number) => {
 				let best: Drawn | null = null;

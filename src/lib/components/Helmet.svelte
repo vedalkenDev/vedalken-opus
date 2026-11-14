@@ -14,6 +14,11 @@
 	const PERSPECTIVE = 0.28;
 	const DEPTH_SCALE = 0.78;
 	const PIVOT = 0.2;
+	/** Max visor-rim occlusion. Soft; pointer-facing lobe only. */
+	const RIM_PUNCH = 0.22;
+	const RIM_CELLS = 5;
+	/** Flatten visor bowl so 3D rim punch is weaker. Gaze angles unchanged. */
+	const VISOR_Z = 0.5;
 	/** Visor fill. Light to solid. */
 	const VISOR_BLOCK: Record<string, string> = { '+': '▒', '*': '▓', '#': '█' };
 	/** Cream shell fill. No █ — that read as white squares on cream. Letters stay on the silhouette and visor opening. */
@@ -107,6 +112,26 @@
 			if (kindAt[r * COLS + c] < 2) return true;
 		}
 		return false;
+	});
+
+	/** Chebyshev cells from visor glass to shell. 1 = lip. */
+	const visorInset = CELLS.map((cell) => {
+		if (cell.k < 2) return 99;
+		let best = 12;
+		for (let dr = -6; dr <= 6; dr++) {
+			for (let dc = -6; dc <= 6; dc++) {
+				const d = Math.max(Math.abs(dc), Math.abs(dr));
+				if (d === 0 || d >= best) continue;
+				const c = cell.c + dc;
+				const r = cell.r + dr;
+				if (c < 0 || r < 0 || c >= COLS || r >= ROWS) {
+					best = d;
+					continue;
+				}
+				if (kindAt[r * COLS + c] < 2) best = d;
+			}
+		}
+		return best;
 	});
 
 	/** Shell silhouette and visor opening. Letters only here. Fill is blocks. */
@@ -206,7 +231,7 @@
 	};
 
 	/** Domain-warped thin-film. Glyphs stay put; UV advects through VISOR_FLOW. */
-	const visorRgb = (c: number, r: number, t: number, yaw: number, lip: boolean) => {
+	const visorRgb = (c: number, r: number, t: number, lip: boolean) => {
 		let u = (c - visorBox.minC) / Math.max(1, visorBox.maxC - visorBox.minC);
 		let v = (r - visorBox.minR) / Math.max(1, visorBox.maxR - visorBox.minR);
 		const f0 = flowAt(u, v, t);
@@ -216,7 +241,7 @@
 		u += f1[0] * 0.2;
 		v += f1[1] * 0.2;
 		const thick =
-			u * 0.31 + v * 0.27 + Math.sin((u * 2.1 - v * 1.8) * Math.PI) * 0.18 + (lip ? 0.08 : 0) + yaw * 0.04;
+			u * 0.31 + v * 0.27 + Math.sin((u * 2.1 - v * 1.8) * Math.PI) * 0.18 + (lip ? 0.04 : 0);
 		const s = ((thick % 1) + 1) % 1;
 		const x = s * (paletteRgb.length - 1);
 		const i = Math.min(paletteRgb.length - 2, Math.floor(x));
@@ -369,6 +394,7 @@
 				behind: number;
 				lip: boolean;
 				rim: boolean;
+				inset: number;
 			};
 			const drawn: Drawn[] = [];
 
@@ -377,7 +403,8 @@
 				const z01 = cell.z / DEPTH_SPAN;
 				const x0 = (cell.c + 0.5 - cx) / cx - visorPivot.x;
 				const y0 = -(cell.r + 0.5 - cyG) / cyG - visorPivot.y;
-				const z0 = (PIVOT - z01) * DEPTH_SCALE - visorPivot.z;
+				let z0 = (PIVOT - z01) * DEPTH_SCALE - visorPivot.z;
+				if (cell.k >= 2) z0 *= VISOR_Z;
 				const xYaw = x0 * cyA + z0 * syA;
 				const zYaw = -x0 * syA + z0 * cyA;
 				const y1 = y0 * cp - zYaw * sp + visorPivot.y;
@@ -398,7 +425,8 @@
 					z01,
 					behind: relief[i],
 					lip: fringe[i],
-					rim: rim[i]
+					rim: rim[i],
+					inset: visorInset[i]
 				});
 			}
 
@@ -455,8 +483,21 @@
 				if (alpha <= 0) continue;
 				ctx.globalAlpha = alpha;
 				if (glyph.k >= 2) {
-					const rgb = visorRgb(glyph.c, glyph.r, t, yaw, glyph.lip);
-					ctx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+					const rgb = visorRgb(glyph.c, glyph.r, t, glyph.lip);
+					const gx = yaw / MAX_YAW;
+					const gy = pitch / MAX_PITCH;
+					const mag = Math.min(1, Math.hypot(gx, gy));
+					let punch = 0;
+					if (mag > 0.04) {
+						const rimW = Math.max(0, 1 - (glyph.inset - 1) / RIM_CELLS);
+						const ux = (glyph.c - visorC) / Math.max(1, (visorBox.maxC - visorBox.minC) / 2);
+						const uy = (glyph.r - visorR) / Math.max(1, (visorBox.maxR - visorBox.minR) / 2);
+						const along = (ux * gx + uy * gy) / (mag * Math.max(0.25, Math.hypot(ux, uy)));
+						const lobe = Math.max(0, along);
+						punch = mag * RIM_PUNCH * lobe * (0.35 + 0.65 * rimW);
+					}
+					const s = 1 - punch;
+					ctx.fillStyle = `rgb(${(rgb[0] * s) | 0},${(rgb[1] * s) | 0},${(rgb[2] * s) | 0})`;
 					ctx.fillText(VISOR_BLOCK[glyph.ch] ?? '▓', glyph.px, glyph.py);
 				} else if (glyph.k === 1) {
 					ctx.fillStyle = rgbCss(GRAY_RGB, 1 - glyph.z01 * 0.1, 0.88);

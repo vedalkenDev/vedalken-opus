@@ -40,6 +40,11 @@
 	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
 	const GRAY_RGB = [0x24, 0x2a, 0x30] as const;
 	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
+	/**
+	 * Visor advection vs wall clock. Field speeds are 0.12–0.22 rad/s of this time.
+	 * 1 = ~36s mean vector period (too slow to read on load). 3.2 = ~11s, visible in ~1s.
+	 */
+	const FLOW_RATE = 3.2;
 	/** 3×3 vector field. Each cell: rest angle (rad), angular speed, magnitude. */
 	const VISOR_FLOW = [
 		[0.2, 0.2, 0.62],
@@ -363,6 +368,7 @@
 			}
 
 			const t = reduce.matches ? 0 : (now - start) / 1000;
+			const flowT = reduce.matches ? 0 : t * FLOW_RATE;
 			const cyA = Math.cos(yaw);
 			const syA = Math.sin(yaw);
 			const cp = Math.cos(pitch);
@@ -483,7 +489,7 @@
 				if (alpha <= 0) continue;
 				ctx.globalAlpha = alpha;
 				if (glyph.k >= 2) {
-					const rgb = visorRgb(glyph.c, glyph.r, t, glyph.lip);
+					const rgb = visorRgb(glyph.c, glyph.r, flowT, glyph.lip);
 					const gx = yaw / MAX_YAW;
 					const gy = pitch / MAX_PITCH;
 					const mag = Math.min(1, Math.hypot(gx, gy));

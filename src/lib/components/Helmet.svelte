@@ -8,7 +8,7 @@
 	const CELL_H = 11;
 	const MAX_YAW = 0.32;
 	const MAX_PITCH = 0.22;
-	/** Critically damped follow (animations.dev springs: interruptible, no fixed duration). */
+	/** Critically damped gaze (orientation only; no position lerp). */
 	const LOOK_OMEGA = 11;
 	const LOOK_ZETA = 1;
 	const PERSPECTIVE = 0.28;
@@ -166,6 +166,24 @@
 		return { minC, maxC, minR, maxR };
 	})();
 
+	/** Visor centroid in object space. lookAt rotates around this; the helmet does not translate. */
+	const visorPivot = (() => {
+		const cx = COLS / 2;
+		const cyG = ROWS / 2;
+		let sx = 0;
+		let sy = 0;
+		let sz = 0;
+		let n = 0;
+		for (const cell of CELLS) {
+			if (cell.k < 2) continue;
+			sx += (cell.c + 0.5 - cx) / cx;
+			sy += -(cell.r + 0.5 - cyG) / cyG;
+			sz += (PIVOT - cell.z / DEPTH_SPAN) * DEPTH_SCALE;
+			n++;
+		}
+		return { x: sx / n, y: sy / n, z: sz / n };
+	})();
+
 	const flowAt = (u: number, v: number, t: number) => {
 		const gx = Math.max(0, Math.min(1.999, u * 2));
 		const gy = Math.max(0, Math.min(1.999, v * 2));
@@ -275,13 +293,16 @@
 				return;
 			}
 			const box = stage.getBoundingClientRect();
-			const nx = Math.max(-1, Math.min(1, ((event.clientX - box.left) / box.width) * 2 - 1));
-			const ny = Math.max(-1, Math.min(1, ((event.clientY - box.top) / box.height) * 2 - 1));
-			const span = Math.atan2(1, 1);
-			// Canals look-at: rotateY from pointer X, rotateX = −pointer Y.
-			// Visor sits on −Z, so +Ry turns it left; atan2 maps the pointer onto that frame.
-			tx = -Math.atan2(nx, 1) * (MAX_YAW / span);
-			ty = -Math.atan2(ny, 1) * (MAX_PITCH / span);
+			// Gaze at the pointer's current position vs the visor, not stage-normalized follow.
+			const visorX = box.left + ((visorC + 0.5) / COLS) * box.width;
+			const visorY = box.top + ((visorR + 0.5) / ROWS) * box.height;
+			const dx = event.clientX - visorX;
+			const dy = event.clientY - visorY;
+			// Defold / three.js lookAt: +Z faces the pointer on a plane in front of the visor.
+			// Rotation only — no invert, no lerp toward cursor position, no velocity.
+			const gazeZ = box.width * 1.55;
+			tx = Math.max(-MAX_YAW, Math.min(MAX_YAW, Math.atan2(dx, gazeZ)));
+			ty = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, Math.atan2(dy, Math.hypot(dx, gazeZ))));
 		};
 
 		const draw = (now: number) => {
@@ -326,6 +347,9 @@
 			const scaleX = canvas.width / COLS;
 			const scaleY = canvas.height / ROWS;
 			const fontPx = Math.max(8, scaleY * 0.92);
+			const wRest = 1 / (1 - visorPivot.z * PERSPECTIVE);
+			const restVisorX = (cx + visorPivot.x * wRest * cx) * scaleX;
+			const restVisorY = (cyG - visorPivot.y * wRest * cyG) * scaleY;
 
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -350,14 +374,15 @@
 
 			for (let i = 0; i < CELLS.length; i++) {
 				const cell = CELLS[i];
-				const x = (cell.c + 0.5 - cx) / cx;
-				const y = -(cell.r + 0.5 - cyG) / cyG;
 				const z01 = cell.z / DEPTH_SPAN;
-				const z = (PIVOT - z01) * DEPTH_SCALE;
-				const x1 = x * cyA + z * syA;
-				const z1 = -x * syA + z * cyA;
-				const y1 = y * cp - z1 * sp;
-				const z2 = y * sp + z1 * cp;
+				const x0 = (cell.c + 0.5 - cx) / cx - visorPivot.x;
+				const y0 = -(cell.r + 0.5 - cyG) / cyG - visorPivot.y;
+				const z0 = (PIVOT - z01) * DEPTH_SCALE - visorPivot.z;
+				const xYaw = x0 * cyA + z0 * syA;
+				const zYaw = -x0 * syA + z0 * cyA;
+				const y1 = y0 * cp - zYaw * sp + visorPivot.y;
+				const z2 = y0 * sp + zYaw * cp + visorPivot.z;
+				const x1 = xYaw + visorPivot.x;
 				const w = 1 / (1 - z2 * PERSPECTIVE);
 				const px = (cx + x1 * w * cx) * scaleX;
 				const py = (cyG - y1 * w * cyG) * scaleY;
@@ -375,6 +400,24 @@
 					lip: fringe[i],
 					rim: rim[i]
 				});
+			}
+
+			let visorSx = 0;
+			let visorSy = 0;
+			let visorN = 0;
+			for (const glyph of drawn) {
+				if (glyph.k < 2) continue;
+				visorSx += glyph.px;
+				visorSy += glyph.py;
+				visorN++;
+			}
+			if (visorN > 0) {
+				const ox = restVisorX - visorSx / visorN;
+				const oy = restVisorY - visorSy / visorN;
+				for (const glyph of drawn) {
+					glyph.px += ox;
+					glyph.py += oy;
+				}
 			}
 
 			drawn.sort((a, b) => b.depth - a.depth);

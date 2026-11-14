@@ -6,12 +6,19 @@
 	const TTL_MS = 3 * 60 * 60 * 1000;
 	const CELL_W = 7.4;
 	const CELL_H = 11;
-	const MAX_YAW = 0.18;
-	const MAX_PITCH = 0.14;
-	const LERP = 0.1;
+	const MAX_YAW = 0.32;
+	const MAX_PITCH = 0.22;
+	/** Critically damped gaze (orientation only; no position lerp). */
+	const LOOK_OMEGA = 11;
+	const LOOK_ZETA = 1;
 	const PERSPECTIVE = 0.28;
 	const DEPTH_SCALE = 0.78;
 	const PIVOT = 0.2;
+	/** Max visor-rim occlusion. Soft; pointer-facing lobe only. */
+	const RIM_PUNCH = 0.22;
+	const RIM_CELLS = 5;
+	/** Flatten visor bowl so 3D rim punch is weaker. Gaze angles unchanged. */
+	const VISOR_Z = 0.5;
 	/** Visor fill. Light to solid. */
 	const VISOR_BLOCK: Record<string, string> = { '+': '▒', '*': '▓', '#': '█' };
 	/** Cream shell fill. No █ — that read as white squares on cream. Letters stay on the silhouette and visor opening. */
@@ -33,8 +40,23 @@
 	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
 	const GRAY_RGB = [0x24, 0x2a, 0x30] as const;
 	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
-	/** Seconds for one full visor loop: violet → blue → teal → olive → amber → coral → violet. */
-	const VISOR_CYCLE = 10;
+	/**
+	 * Visor advection vs wall clock. Field speeds are 0.12–0.22 rad/s of this time.
+	 * 1 = ~36s mean vector period (too slow to read on load). 3.2 = ~11s, visible in ~1s.
+	 */
+	const FLOW_RATE = 3.2;
+	/** 3×3 vector field. Each cell: rest angle (rad), angular speed, magnitude. */
+	const VISOR_FLOW = [
+		[0.2, 0.2, 0.62],
+		[1.4, -0.17, 0.58],
+		[2.6, 0.14, 0.55],
+		[-0.8, 0.22, 0.6],
+		[0.5, -0.12, 0.48],
+		[2.1, 0.18, 0.58],
+		[3.5, -0.16, 0.52],
+		[-1.7, 0.21, 0.57],
+		[1.1, -0.19, 0.54]
+	] as const;
 	const DEPTH_SPAN = Math.max(1, DEPTH_LEVELS - 1);
 	/** Crease strength tuned at a span of 99. Hold that shade when the span changes. */
 	const CREASE = (40 * DEPTH_SPAN) / 99;
@@ -97,6 +119,26 @@
 		return false;
 	});
 
+	/** Chebyshev cells from visor glass to shell. 1 = lip. */
+	const visorInset = CELLS.map((cell) => {
+		if (cell.k < 2) return 99;
+		let best = 12;
+		for (let dr = -6; dr <= 6; dr++) {
+			for (let dc = -6; dc <= 6; dc++) {
+				const d = Math.max(Math.abs(dc), Math.abs(dr));
+				if (d === 0 || d >= best) continue;
+				const c = cell.c + dc;
+				const r = cell.r + dr;
+				if (c < 0 || r < 0 || c >= COLS || r >= ROWS) {
+					best = d;
+					continue;
+				}
+				if (kindAt[r * COLS + c] < 2) best = d;
+			}
+		}
+		return best;
+	});
+
 	/** Shell silhouette and visor opening. Letters only here. Fill is blocks. */
 	const rim = CELLS.map((cell) => {
 		if (cell.k >= 2) return false;
@@ -154,13 +196,58 @@
 		return { minC, maxC, minR, maxR };
 	})();
 
-	/** Traveling thin-film. Glyphs stay put; only the sample walks the looped palette. */
-	const visorRgb = (c: number, r: number, t: number, yaw: number, lip: boolean) => {
-		const u = (c - visorBox.minC) / Math.max(1, visorBox.maxC - visorBox.minC);
-		const v = (r - visorBox.minR) / Math.max(1, visorBox.maxR - visorBox.minR);
-		const field = u * 0.22 + v * 0.4 + Math.sin((u * 2.3 + v * 1.7) * Math.PI) * 0.1;
-		const lipShift = lip ? 0.12 : 0;
-		const s = ((field + t / VISOR_CYCLE + yaw * 0.1 + lipShift) % 1 + 1) % 1;
+	/** Visor centroid in object space. lookAt rotates around this; the helmet does not translate. */
+	const visorPivot = (() => {
+		const cx = COLS / 2;
+		const cyG = ROWS / 2;
+		let sx = 0;
+		let sy = 0;
+		let sz = 0;
+		let n = 0;
+		for (const cell of CELLS) {
+			if (cell.k < 2) continue;
+			sx += (cell.c + 0.5 - cx) / cx;
+			sy += -(cell.r + 0.5 - cyG) / cyG;
+			sz += (PIVOT - cell.z / DEPTH_SPAN) * DEPTH_SCALE;
+			n++;
+		}
+		return { x: sx / n, y: sy / n, z: sz / n };
+	})();
+
+	const flowAt = (u: number, v: number, t: number) => {
+		const gx = Math.max(0, Math.min(1.999, u * 2));
+		const gy = Math.max(0, Math.min(1.999, v * 2));
+		const x0 = gx | 0;
+		const y0 = gy | 0;
+		const x1 = Math.min(2, x0 + 1);
+		const y1 = Math.min(2, y0 + 1);
+		const fx = gx - x0;
+		const fy = gy - y0;
+		const vec = (ix: number, iy: number) => {
+			const [ang0, spd, mag] = VISOR_FLOW[iy * 3 + ix];
+			const a = ang0 + t * spd;
+			return [Math.cos(a) * mag, Math.sin(a) * mag] as const;
+		};
+		const mix = (p: readonly [number, number], q: readonly [number, number], w: number) =>
+			[p[0] + (q[0] - p[0]) * w, p[1] + (q[1] - p[1]) * w] as const;
+		const a = mix(vec(x0, y0), vec(x1, y0), fx);
+		const b = mix(vec(x0, y1), vec(x1, y1), fx);
+		return mix(a, b, fy);
+	};
+
+	/** Domain-warped thin-film. Glyphs stay put; UV advects through VISOR_FLOW. */
+	const visorRgb = (c: number, r: number, t: number, lip: boolean) => {
+		let u = (c - visorBox.minC) / Math.max(1, visorBox.maxC - visorBox.minC);
+		let v = (r - visorBox.minR) / Math.max(1, visorBox.maxR - visorBox.minR);
+		const f0 = flowAt(u, v, t);
+		u += f0[0] * 0.28;
+		v += f0[1] * 0.28;
+		const f1 = flowAt(u, v, t * 0.85 + 1.7);
+		u += f1[0] * 0.2;
+		v += f1[1] * 0.2;
+		const thick =
+			u * 0.31 + v * 0.27 + Math.sin((u * 2.1 - v * 1.8) * Math.PI) * 0.18 + (lip ? 0.04 : 0);
+		const s = ((thick % 1) + 1) % 1;
 		const x = s * (paletteRgb.length - 1);
 		const i = Math.min(paletteRgb.length - 2, Math.floor(x));
 		const f = x - i;
@@ -179,6 +266,9 @@
 		let ty = 0;
 		let yaw = 0;
 		let pitch = 0;
+		let yawV = 0;
+		let pitchV = 0;
+		let prevNow = 0;
 		let raf = 0;
 		let weatherTimer = 0;
 		let start = performance.now();
@@ -233,10 +323,16 @@
 				return;
 			}
 			const box = stage.getBoundingClientRect();
-			const nx = ((event.clientX - box.left) / box.width) * 2 - 1;
-			const ny = ((event.clientY - box.top) / box.height) * 2 - 1;
-			tx = Math.max(-1, Math.min(1, nx)) * MAX_YAW;
-			ty = Math.max(-1, Math.min(1, -ny)) * MAX_PITCH;
+			// Gaze at the pointer's current position vs the visor, not stage-normalized follow.
+			const visorX = box.left + ((visorC + 0.5) / COLS) * box.width;
+			const visorY = box.top + ((visorR + 0.5) / ROWS) * box.height;
+			const dx = event.clientX - visorX;
+			const dy = event.clientY - visorY;
+			// Defold / three.js lookAt: +Z faces the pointer on a plane in front of the visor.
+			// Rotation only — no invert, no lerp toward cursor position, no velocity.
+			const gazeZ = box.width * 1.55;
+			tx = Math.max(-MAX_YAW, Math.min(MAX_YAW, Math.atan2(dx, gazeZ)));
+			ty = Math.max(-MAX_PITCH, Math.min(MAX_PITCH, Math.atan2(dy, Math.hypot(dx, gazeZ))));
 		};
 
 		const draw = (now: number) => {
@@ -254,14 +350,25 @@
 				canvas.style.height = `${cssH}px`;
 			}
 
-			yaw += (tx - yaw) * LERP;
-			pitch += (ty - pitch) * LERP;
+			const dt = prevNow === 0 ? 1 / 60 : Math.min(0.032, (now - prevNow) / 1000);
+			prevNow = now;
 			if (reduce.matches) {
 				yaw = 0;
 				pitch = 0;
+				yawV = 0;
+				pitchV = 0;
+			} else {
+				const pull = (pos: number, vel: number, target: number) => {
+					const acc = -2 * LOOK_ZETA * LOOK_OMEGA * vel - LOOK_OMEGA * LOOK_OMEGA * (pos - target);
+					const nextV = vel + acc * dt;
+					return [pos + nextV * dt, nextV] as const;
+				};
+				[yaw, yawV] = pull(yaw, yawV, tx);
+				[pitch, pitchV] = pull(pitch, pitchV, ty);
 			}
 
 			const t = reduce.matches ? 0 : (now - start) / 1000;
+			const flowT = reduce.matches ? 0 : t * FLOW_RATE;
 			const cyA = Math.cos(yaw);
 			const syA = Math.sin(yaw);
 			const cp = Math.cos(pitch);
@@ -271,6 +378,9 @@
 			const scaleX = canvas.width / COLS;
 			const scaleY = canvas.height / ROWS;
 			const fontPx = Math.max(8, scaleY * 0.92);
+			const wRest = 1 / (1 - visorPivot.z * PERSPECTIVE);
+			const restVisorX = (cx + visorPivot.x * wRest * cx) * scaleX;
+			const restVisorY = (cyG - visorPivot.y * wRest * cyG) * scaleY;
 
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -290,19 +400,22 @@
 				behind: number;
 				lip: boolean;
 				rim: boolean;
+				inset: number;
 			};
 			const drawn: Drawn[] = [];
 
 			for (let i = 0; i < CELLS.length; i++) {
 				const cell = CELLS[i];
-				const x = (cell.c + 0.5 - cx) / cx;
-				const y = -(cell.r + 0.5 - cyG) / cyG;
 				const z01 = cell.z / DEPTH_SPAN;
-				const z = (PIVOT - z01) * DEPTH_SCALE;
-				const x1 = x * cyA + z * syA;
-				const z1 = -x * syA + z * cyA;
-				const y1 = y * cp - z1 * sp;
-				const z2 = y * sp + z1 * cp;
+				const x0 = (cell.c + 0.5 - cx) / cx - visorPivot.x;
+				const y0 = -(cell.r + 0.5 - cyG) / cyG - visorPivot.y;
+				let z0 = (PIVOT - z01) * DEPTH_SCALE - visorPivot.z;
+				if (cell.k >= 2) z0 *= VISOR_Z;
+				const xYaw = x0 * cyA + z0 * syA;
+				const zYaw = -x0 * syA + z0 * cyA;
+				const y1 = y0 * cp - zYaw * sp + visorPivot.y;
+				const z2 = y0 * sp + zYaw * cp + visorPivot.z;
+				const x1 = xYaw + visorPivot.x;
 				const w = 1 / (1 - z2 * PERSPECTIVE);
 				const px = (cx + x1 * w * cx) * scaleX;
 				const py = (cyG - y1 * w * cyG) * scaleY;
@@ -318,11 +431,36 @@
 					z01,
 					behind: relief[i],
 					lip: fringe[i],
-					rim: rim[i]
+					rim: rim[i],
+					inset: visorInset[i]
 				});
 			}
 
-			drawn.sort((a, b) => b.depth - a.depth);
+			let visorSx = 0;
+			let visorSy = 0;
+			let visorN = 0;
+			for (const glyph of drawn) {
+				if (glyph.k < 2) continue;
+				visorSx += glyph.px;
+				visorSy += glyph.py;
+				visorN++;
+			}
+			if (visorN > 0) {
+				const ox = restVisorX - visorSx / visorN;
+				const oy = restVisorY - visorSy / visorN;
+				for (const glyph of drawn) {
+					glyph.px += ox;
+					glyph.py += oy;
+				}
+			}
+
+			// Glass last: overlapping shell/rim glyphs stay behind the visor (painter layers).
+			drawn.sort((a, b) => {
+				const ga = a.k >= 2 ? 1 : 0;
+				const gb = b.k >= 2 ? 1 : 0;
+				if (ga !== gb) return ga - gb;
+				return b.depth - a.depth;
+			});
 			const reach2 = (fontPx * 0.62) ** 2;
 			const coverAt = (x: number, y: number) => {
 				let best: Drawn | null = null;
@@ -351,8 +489,21 @@
 				if (alpha <= 0) continue;
 				ctx.globalAlpha = alpha;
 				if (glyph.k >= 2) {
-					const rgb = visorRgb(glyph.c, glyph.r, t, yaw, glyph.lip);
-					ctx.fillStyle = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+					const rgb = visorRgb(glyph.c, glyph.r, flowT, glyph.lip);
+					const gx = yaw / MAX_YAW;
+					const gy = pitch / MAX_PITCH;
+					const mag = Math.min(1, Math.hypot(gx, gy));
+					let punch = 0;
+					if (mag > 0.04) {
+						const rimW = Math.max(0, 1 - (glyph.inset - 1) / RIM_CELLS);
+						const ux = (glyph.c - visorC) / Math.max(1, (visorBox.maxC - visorBox.minC) / 2);
+						const uy = (glyph.r - visorR) / Math.max(1, (visorBox.maxR - visorBox.minR) / 2);
+						const along = (ux * gx + uy * gy) / (mag * Math.max(0.25, Math.hypot(ux, uy)));
+						const lobe = Math.max(0, along);
+						punch = mag * RIM_PUNCH * lobe * (0.35 + 0.65 * rimW);
+					}
+					const s = 1 - punch;
+					ctx.fillStyle = `rgb(${(rgb[0] * s) | 0},${(rgb[1] * s) | 0},${(rgb[2] * s) | 0})`;
 					ctx.fillText(VISOR_BLOCK[glyph.ch] ?? '▓', glyph.px, glyph.py);
 				} else if (glyph.k === 1) {
 					ctx.fillStyle = rgbCss(GRAY_RGB, 1 - glyph.z01 * 0.1, 0.88);

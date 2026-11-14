@@ -185,7 +185,6 @@
 		font-size: 0.75rem;
 		letter-spacing: 0.08em;
 		opacity: 0.45;
-		cursor: pointer;
 	}
 
 	.shortcut:hover,

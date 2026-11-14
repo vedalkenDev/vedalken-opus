@@ -66,6 +66,67 @@
 		line-height: 1.6;
 	}
 
+	@media (hover: hover) and (pointer: fine) {
+		@media (prefers-reduced-motion: no-preference) {
+			:global(html) {
+				cursor: url('/cursors/default.png') 10 10, auto;
+			}
+
+			:global(a[href]) {
+				cursor: url('/cursors/pointer.png') 10 10, pointer;
+			}
+
+			:global(a[href]:active) {
+				cursor: url('/cursors/click.png') 10 10, pointer;
+			}
+
+			:global(button),
+			:global([type='submit']),
+			:global([type='button']),
+			:global([role='button']) {
+				cursor: url('/cursors/hover.png') 10 10, pointer;
+			}
+
+			:global(button:active),
+			:global([type='submit']:active),
+			:global([type='button']:active),
+			:global([role='button']:active) {
+				cursor: url('/cursors/click.png') 10 10, pointer;
+			}
+
+			:global(input:not([type='submit']):not([type='button']):not([type='checkbox']):not([type='radio'])),
+			:global(textarea),
+			:global([contenteditable='true']),
+			:global(main p) {
+				cursor: url('/cursors/text.png') 6 10, text;
+			}
+
+			:global(img),
+			:global(canvas) {
+				cursor: url('/cursors/highlight.png') 15 15, crosshair;
+			}
+
+			:global(a.pak),
+			:global(a.pak *) {
+				cursor: url('/cursors/grab.png') 10 10, grab;
+			}
+
+			:global(a.pak:active),
+			:global(a.pak:active *) {
+				cursor: url('/cursors/grabbing.png') 10 10, grabbing;
+			}
+
+			:global(html :disabled),
+			:global(html [aria-disabled='true']) {
+				cursor: url('/cursors/disabled.png') 10 10, not-allowed;
+			}
+
+			:global([aria-busy='true']) {
+				cursor: url('/cursors/wait.png') 10 10, wait;
+			}
+		}
+	}
+
 	:global(::selection) {
 		background: var(--cream);
 		color: var(--charcoal);

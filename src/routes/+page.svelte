@@ -16,7 +16,7 @@
 <section id="about">
 	<h1>About</h1>
 	<p>
-		Luqmaan Sayed is a web designer and developer based in Durban, transitioning into product. He works on a <WordVideo src="/videos/cosmic.mp4">cosmic</WordVideo> archive, web design, <WordVideo src="/videos/interfaces.mp4">interfaces</WordVideo>, and <WordVideo src="/videos/motion.mp4">motion</WordVideo>.
+		Luqmaan Sayed is a web designer and developer based in Durban, transitioning into product. He works on a <WordVideo src="/videos/cosmic-archive.mp4">cosmic archive</WordVideo>, web design, <WordVideo src="/videos/interfaces.mp4">interfaces</WordVideo>, and <WordVideo src="/videos/motion.mp4">motion</WordVideo>.
 	</p>
 </section>
 

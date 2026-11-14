@@ -20,7 +20,15 @@
 		on = true;
 		x = clientX;
 		y = clientY;
-		video?.play().catch(() => {});
+		if (!video) return;
+		try {
+			video.currentTime = 0;
+		} catch {
+			/* not seekable until data arrives */
+		}
+		video.muted = true;
+		const play = video.play();
+		if (play) play.catch(() => {});
 	}
 
 	function enter(event: MouseEvent) {
@@ -40,7 +48,13 @@
 
 	function leave() {
 		on = false;
-		video?.pause();
+		if (!video) return;
+		video.pause();
+		try {
+			video.currentTime = 0;
+		} catch {
+			/* ignore */
+		}
 	}
 </script>
 
@@ -64,7 +78,7 @@
 		muted
 		loop
 		playsinline
-		preload="metadata"
+		preload="auto"
 		aria-hidden="true"
 	></video></span
 >
@@ -81,7 +95,6 @@
 	}
 
 	.float {
-		display: none;
 		position: fixed;
 		z-index: 30;
 		width: 10rem;
@@ -91,9 +104,12 @@
 		transform: translate(-50%, -120%);
 		mix-blend-mode: screen;
 		border: 1px solid var(--cream);
+		opacity: 0;
+		visibility: hidden;
 	}
 
 	.float.show {
-		display: block;
+		opacity: 1;
+		visibility: visible;
 	}
 </style>

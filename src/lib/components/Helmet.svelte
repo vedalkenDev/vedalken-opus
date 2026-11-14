@@ -6,9 +6,11 @@
 	const TTL_MS = 3 * 60 * 60 * 1000;
 	const CELL_W = 7.4;
 	const CELL_H = 11;
-	const MAX_YAW = 0.18;
-	const MAX_PITCH = 0.14;
-	const LERP = 0.1;
+	const MAX_YAW = 0.32;
+	const MAX_PITCH = 0.22;
+	/** Critically damped follow (animations.dev springs: interruptible, no fixed duration). */
+	const LOOK_OMEGA = 11;
+	const LOOK_ZETA = 1;
 	const PERSPECTIVE = 0.28;
 	const DEPTH_SCALE = 0.78;
 	const PIVOT = 0.2;
@@ -33,8 +35,18 @@
 	const CREAM_RGB = [0xf4, 0xf3, 0xe8] as const;
 	const GRAY_RGB = [0x24, 0x2a, 0x30] as const;
 	const PALETTE = ['#592AA4', '#4277A2', '#3FB6AF', '#939E7A', '#C18D5D', '#D96350', '#592AA4'];
-	/** Seconds for one full visor loop: violet → blue → teal → olive → amber → coral → violet. */
-	const VISOR_CYCLE = 10;
+	/** 3×3 vector field. Each cell: rest angle (rad), angular speed, magnitude. */
+	const VISOR_FLOW = [
+		[0.2, 0.2, 0.62],
+		[1.4, -0.17, 0.58],
+		[2.6, 0.14, 0.55],
+		[-0.8, 0.22, 0.6],
+		[0.5, -0.12, 0.48],
+		[2.1, 0.18, 0.58],
+		[3.5, -0.16, 0.52],
+		[-1.7, 0.21, 0.57],
+		[1.1, -0.19, 0.54]
+	] as const;
 	const DEPTH_SPAN = Math.max(1, DEPTH_LEVELS - 1);
 	/** Crease strength tuned at a span of 99. Hold that shade when the span changes. */
 	const CREASE = (40 * DEPTH_SPAN) / 99;
@@ -154,13 +166,40 @@
 		return { minC, maxC, minR, maxR };
 	})();
 
-	/** Traveling thin-film. Glyphs stay put; only the sample walks the looped palette. */
+	const flowAt = (u: number, v: number, t: number) => {
+		const gx = Math.max(0, Math.min(1.999, u * 2));
+		const gy = Math.max(0, Math.min(1.999, v * 2));
+		const x0 = gx | 0;
+		const y0 = gy | 0;
+		const x1 = Math.min(2, x0 + 1);
+		const y1 = Math.min(2, y0 + 1);
+		const fx = gx - x0;
+		const fy = gy - y0;
+		const vec = (ix: number, iy: number) => {
+			const [ang0, spd, mag] = VISOR_FLOW[iy * 3 + ix];
+			const a = ang0 + t * spd;
+			return [Math.cos(a) * mag, Math.sin(a) * mag] as const;
+		};
+		const mix = (p: readonly [number, number], q: readonly [number, number], w: number) =>
+			[p[0] + (q[0] - p[0]) * w, p[1] + (q[1] - p[1]) * w] as const;
+		const a = mix(vec(x0, y0), vec(x1, y0), fx);
+		const b = mix(vec(x0, y1), vec(x1, y1), fx);
+		return mix(a, b, fy);
+	};
+
+	/** Domain-warped thin-film. Glyphs stay put; UV advects through VISOR_FLOW. */
 	const visorRgb = (c: number, r: number, t: number, yaw: number, lip: boolean) => {
-		const u = (c - visorBox.minC) / Math.max(1, visorBox.maxC - visorBox.minC);
-		const v = (r - visorBox.minR) / Math.max(1, visorBox.maxR - visorBox.minR);
-		const field = u * 0.22 + v * 0.4 + Math.sin((u * 2.3 + v * 1.7) * Math.PI) * 0.1;
-		const lipShift = lip ? 0.12 : 0;
-		const s = ((field + t / VISOR_CYCLE + yaw * 0.1 + lipShift) % 1 + 1) % 1;
+		let u = (c - visorBox.minC) / Math.max(1, visorBox.maxC - visorBox.minC);
+		let v = (r - visorBox.minR) / Math.max(1, visorBox.maxR - visorBox.minR);
+		const f0 = flowAt(u, v, t);
+		u += f0[0] * 0.28;
+		v += f0[1] * 0.28;
+		const f1 = flowAt(u, v, t * 0.85 + 1.7);
+		u += f1[0] * 0.2;
+		v += f1[1] * 0.2;
+		const thick =
+			u * 0.31 + v * 0.27 + Math.sin((u * 2.1 - v * 1.8) * Math.PI) * 0.18 + (lip ? 0.08 : 0) + yaw * 0.04;
+		const s = ((thick % 1) + 1) % 1;
 		const x = s * (paletteRgb.length - 1);
 		const i = Math.min(paletteRgb.length - 2, Math.floor(x));
 		const f = x - i;
@@ -179,6 +218,9 @@
 		let ty = 0;
 		let yaw = 0;
 		let pitch = 0;
+		let yawV = 0;
+		let pitchV = 0;
+		let prevNow = 0;
 		let raf = 0;
 		let weatherTimer = 0;
 		let start = performance.now();
@@ -233,10 +275,13 @@
 				return;
 			}
 			const box = stage.getBoundingClientRect();
-			const nx = ((event.clientX - box.left) / box.width) * 2 - 1;
-			const ny = ((event.clientY - box.top) / box.height) * 2 - 1;
-			tx = Math.max(-1, Math.min(1, nx)) * MAX_YAW;
-			ty = Math.max(-1, Math.min(1, -ny)) * MAX_PITCH;
+			const nx = Math.max(-1, Math.min(1, ((event.clientX - box.left) / box.width) * 2 - 1));
+			const ny = Math.max(-1, Math.min(1, ((event.clientY - box.top) / box.height) * 2 - 1));
+			const span = Math.atan2(1, 1);
+			// Canals look-at: rotateY from pointer X, rotateX = −pointer Y.
+			// Visor sits on −Z, so +Ry turns it left; atan2 maps the pointer onto that frame.
+			tx = -Math.atan2(nx, 1) * (MAX_YAW / span);
+			ty = -Math.atan2(ny, 1) * (MAX_PITCH / span);
 		};
 
 		const draw = (now: number) => {
@@ -254,11 +299,21 @@
 				canvas.style.height = `${cssH}px`;
 			}
 
-			yaw += (tx - yaw) * LERP;
-			pitch += (ty - pitch) * LERP;
+			const dt = prevNow === 0 ? 1 / 60 : Math.min(0.032, (now - prevNow) / 1000);
+			prevNow = now;
 			if (reduce.matches) {
 				yaw = 0;
 				pitch = 0;
+				yawV = 0;
+				pitchV = 0;
+			} else {
+				const pull = (pos: number, vel: number, target: number) => {
+					const acc = -2 * LOOK_ZETA * LOOK_OMEGA * vel - LOOK_OMEGA * LOOK_OMEGA * (pos - target);
+					const nextV = vel + acc * dt;
+					return [pos + nextV * dt, nextV] as const;
+				};
+				[yaw, yawV] = pull(yaw, yawV, tx);
+				[pitch, pitchV] = pull(pitch, pitchV, ty);
 			}
 
 			const t = reduce.matches ? 0 : (now - start) / 1000;

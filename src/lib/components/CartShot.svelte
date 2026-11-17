@@ -62,7 +62,7 @@
 
 <div class="host" bind:this={host}>
 	{#if cover.art}
-		<img src={cover.art} alt="" />
+		<img src={cover.art} alt="" decoding="async" />
 	{:else}
 		<canvas bind:this={canvas} aria-hidden="true"></canvas>
 	{/if}

@@ -27,7 +27,7 @@ export const cartCovers: Record<string, CartCover> = {
 		rows: 20,
 		colors: [[0xc1, 0x8d, 0x5d], [0x42, 0x77, 0xa2]] as const,
 		mark: null,
-		art: '/carts/plancheck.png',
+		art: '/carts/plancheck.webp',
 		luma: [
 		188,128, 63, 85,121,188,248,251,252,255,234,213,204,209,242,187,120,111,102, 97,102,127,104,119,120, 94,136,104, 87, 81,156,204,
 		122,131,135,104,241,240,249,251,255,241,158, 83, 77,111,118, 93, 92,109, 95,115,118,101,107,113, 93, 75, 96,145,133,122,191,229,
@@ -57,7 +57,7 @@ export const cartCovers: Record<string, CartCover> = {
 		rows: 20,
 		colors: [[0xd9, 0x63, 0x50], [0x3f, 0xb6, 0xaf]] as const,
 		mark: [0xd9, 0x63, 0x50] as const,
-		art: '/carts/zone-of-awareness.png',
+		art: '/carts/zone-of-awareness.webp',
 		luma: [
 		175,178,193,203,186,199,206,214,220,207,192,195,181,168,190,196,194,196,183,183,185,156,158,210,161,166,159,143, 33, 33, 33, 33,
 		200,194,199,205,206,202,209,215,215,211,211,204,198,191,192,195,192,199,197,200,193,157,210,210,210,210,161,160,150,136,134,141,
@@ -108,7 +108,7 @@ export const cartCovers: Record<string, CartCover> = {
 		rows: 20,
 		colors: [[0x59, 0x2a, 0xa4], [0xd9, 0x63, 0x50]] as const,
 		mark: null,
-		art: '/carts/burning-wish.png',
+		art: '/carts/burning-wish.webp',
 		luma: [
 		 49, 54, 57, 56, 53, 47, 42,  0,  0,  0,  0,  0,  0,  0, 39, 39,  0,  0,  0,  0,  0,  0,  0, 45,183,177, 43,180,184,185,180, 41,
 		 54, 54, 53, 48, 43,  0,  0,  0,  0,  0,  0,  0,  0,  0, 44, 44,  0,  0,  0,  0, 41, 45, 75,246,250,233,208,241,255,255,248,214,
@@ -138,7 +138,7 @@ export const cartCovers: Record<string, CartCover> = {
 		rows: 20,
 		colors: [[0x3f, 0xb6, 0xaf], [0x59, 0x2a, 0xa4]] as const,
 		mark: null,
-		art: '/carts/ascii-image-generator.png',
+		art: '/carts/ascii-image-generator.webp',
 		luma: [
 		73, 80, 90, 90, 85, 83, 85, 91,101, 98,107,116,120,121,101, 92, 96,132,151,151,146,139,144,144,145,147,150,152,155,156,164,169,
 		83, 87, 95, 99,102,100,117,126,150,169,164,171,167,164, 98, 50, 62, 95,122,124,133,136,133,140,149,154,159,164,167,168,166,169,

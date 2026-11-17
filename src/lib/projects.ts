@@ -58,14 +58,14 @@ export const projects: Project[] = [
 		],
 		stills: [
 			{
-				before: '/work/ascii-image-generator/before-eagle.jpg',
-				after: '/work/ascii-image-generator/after-eagle.png',
+				before: '/work/ascii-image-generator/before-eagle.webp',
+				after: '/carts/ascii-image-generator.webp',
 				caption:
 					'Pinterest pin of a Pixabay Eagle Nebula still, then Visor in the generator.'
 			},
 			{
-				before: '/work/ascii-image-generator/before-seahorse.jpg',
-				after: '/work/ascii-image-generator/after-seahorse.png',
+				before: '/work/ascii-image-generator/before-seahorse.webp',
+				after: '/work/ascii-image-generator/after-seahorse.webp',
 				caption:
 					'Pinterest pin of NASA APOD 2014 Nov 30 (Seahorse of the LMC), then Visor in the generator.'
 			}

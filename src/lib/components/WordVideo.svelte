@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
 	let { src, children }: { src: string; children: Snippet } = $props();
 
@@ -7,6 +7,8 @@
 	let x = $state(0);
 	let y = $state(0);
 	let video: HTMLVideoElement | undefined = $state();
+	// Touch and reduced-motion visitors never see the clip, so they never download it.
+	let armed = $state(false);
 
 	function allowed() {
 		return (
@@ -15,12 +17,26 @@
 		);
 	}
 
+	onMount(() => {
+		if (!allowed()) return;
+		// Fetch after the page settles so first hover still plays at once.
+		const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1200));
+		const cancel = window.cancelIdleCallback ?? window.clearTimeout;
+		const id = idle(() => (armed = true));
+		return () => cancel(id);
+	});
+
 	function showAt(clientX: number, clientY: number) {
 		if (!allowed()) return;
 		on = true;
 		x = clientX;
 		y = clientY;
 		if (!video) return;
+		if (!armed) {
+			// Hovered before idle fired. Set src now so play() below has data to load.
+			armed = true;
+			video.src = src;
+		}
 		try {
 			video.currentTime = 0;
 		} catch {
@@ -74,11 +90,11 @@
 		class:show={on}
 		style:left="{x}px"
 		style:top="{y}px"
-		{src}
+		src={armed ? src : undefined}
 		muted
 		loop
 		playsinline
-		preload="auto"
+		preload={armed ? 'auto' : 'none'}
 		aria-hidden="true"
 	></video></span
 >

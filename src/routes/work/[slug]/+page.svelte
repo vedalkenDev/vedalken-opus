@@ -39,8 +39,8 @@
 		{#each project.stills as shot}
 			<figure>
 				<div class="pair">
-					<img src={shot.before} alt="" />
-					<img src={shot.after} alt="" />
+					<img src={shot.before} alt="" loading="lazy" decoding="async" />
+					<img src={shot.after} alt="" loading="lazy" decoding="async" />
 				</div>
 				<figcaption>{shot.caption}</figcaption>
 			</figure>

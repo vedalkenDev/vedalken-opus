@@ -21,6 +21,7 @@
 		<nav aria-label="Primary">
 			<a href="/">Home</a>
 			<a href="/work">Work</a>
+			<a href="/shelf">Shelf</a>
 			<a href="/about">About</a>
 		</nav>
 	</header>

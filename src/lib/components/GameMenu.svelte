@@ -5,6 +5,7 @@
 		{ label: 'Home', href: '/' },
 		{ label: 'About', href: '/#about' },
 		{ label: 'Projects', href: '/#work' },
+		{ label: 'Shelf', href: '/shelf' },
 		{ label: 'Contact', href: '/#contact' }
 	];
 

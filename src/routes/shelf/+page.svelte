@@ -75,8 +75,8 @@
 
 	ol {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-		gap: 2.75rem 1.75rem;
+		grid-template-columns: repeat(auto-fill, minmax(min(10.5rem, calc(50% - 0.5rem)), 1fr));
+		gap: 2.75rem 1rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;

@@ -41,7 +41,28 @@
 <li>The sign-in page has an interactive &quot;Reading the sheet&quot; figure. You drag a read head, or use the arrow keys, across a drawing, and a dial shows the distance in millimetres.</li>
 </ul>
 <h2>Outcome</h2>
-<p>PlanCheck is live at plancheck.vedalken.dev behind sign-in, with a waitlist at /waitlist and 6 beta testers. The 33 second demo video shows the flow from upload to report. It&#x27;s early, and I&#x27;m not quoting accuracy figures.</p>
+<p>PlanCheck is live at plancheck.vedalken.dev behind sign-in, with a waitlist at /waitlist and 6 beta testers. The 24-second demo shows the flow from upload to report. It&#x27;s early, and I&#x27;m not quoting accuracy figures.</p>
+<video
+	aria-label="PlanCheck product demo, from drawing upload to report"
+	src="/work/plancheck/demo.mp4"
+	poster="/work/plancheck/poster.png"
+	width="1920"
+	height="1080"
+	preload="none"
+	controls
+	playsinline
+	muted
+>
+	<a href="/work/plancheck/demo.mp4">Download the PlanCheck demo</a>
+</video>
 <h2>What I learned and what&#x27;s next</h2>
 <p>User feedback is what improves the product. When you can build almost anything, what users tell you and the shape of the market matter most. I was adding feature after feature to PlanCheck without checking whether architects needed them. Their feedback is what makes PlanCheck stronger now, and learning to hear it, understand it and act on it has been the most valuable part of the project.</p>
 </article>
+
+<style>
+	video {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+</style>

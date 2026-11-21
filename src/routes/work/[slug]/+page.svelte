@@ -1,4 +1,7 @@
 <script lang="ts">
+	import CosmicArchiveAscii from '#lib/case-studies/cosmic-archive-ascii.svelte';
+	import PlanCheck from '#lib/case-studies/plancheck.svelte';
+	import Toolmac from '#lib/case-studies/toolmac.svelte';
 	import CartShot from '#lib/components/CartShot.svelte';
 	import type { PageProps } from './$types';
 
@@ -10,10 +13,18 @@
 
 <h1>{project.title}</h1>
 <p class="year">{project.year}</p>
-<div class="cover">
-	<CartShot cover={project.cover} />
-</div>
-{#if project.features?.length}
+{#if project.slug !== 'toolmac'}
+	<div class="cover">
+		<CartShot cover={project.cover} />
+	</div>
+{/if}
+{#if project.slug === 'plancheck'}
+	<PlanCheck />
+{:else if project.slug === 'toolmac'}
+	<Toolmac />
+{:else if project.slug === 'ascii-image-generator'}
+	<CosmicArchiveAscii />
+{:else if project.features?.length}
 	<ul class="features">
 		{#each project.features as line}
 			<li>{line}</li>
@@ -23,10 +34,10 @@
 	<p>{project.summary}</p>
 {/if}
 
-{#if project.liveUrl || project.githubUrl}
+{#if project.slug !== 'ascii-image-generator' && (project.liveUrl || project.githubUrl)}
 	<p class="links">
 		{#if project.liveUrl}
-			<a href={project.liveUrl} rel="noreferrer">Open the generator</a>
+			<a href={project.liveUrl} rel="noreferrer">{project.liveLabel ?? 'Open the generator'}</a>
 		{/if}
 		{#if project.githubUrl}
 			<a href={project.githubUrl} rel="noreferrer">GitHub</a>
@@ -49,6 +60,12 @@
 {/if}
 
 <style>
+
+	:global(article) { max-width: 62ch; line-height: 1.65; }
+	:global(article h2) { margin: 2rem 0 0.5rem; line-height: 1.2; }
+	:global(article dt) { font-weight: bold; }
+	:global(article dd) { margin: 0 0 .6rem; }
+
 	.back {
 		margin: 0 0 1.5rem;
 	}

@@ -22,6 +22,11 @@ export type CartCover = {
 const empty = [] as readonly number[];
 
 export const cartCovers: Record<string, CartCover> = {
+	toolmac: {
+		art: '/work/toolmac/storefront.webp',
+		cols: 0, rows: 0, luma: empty, pins: empty, mark: null,
+		colors: [[0, 0, 0], [255, 255, 255]]
+	},
 	plancheck: {
 		cols: 32,
 		rows: 20,

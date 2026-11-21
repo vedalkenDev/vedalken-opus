@@ -13,6 +13,7 @@ export type Project = {
 	summary: string;
 	cover: CartCover;
 	liveUrl?: string;
+	liveLabel?: string;
 	githubUrl?: string;
 	features?: string[];
 	stills?: ProjectStill[];
@@ -23,8 +24,19 @@ export const projects: Project[] = [
 		slug: 'plancheck',
 		title: 'PlanCheck',
 		year: '2026',
-		summary: 'In progress.',
+		summary: 'A pre-submission drawing check for South African architects.',
+		liveUrl: 'https://plancheck.vedalken.dev/waitlist',
+		liveLabel: 'Join the PlanCheck waitlist',
 		cover: cartCovers.plancheck
+	},
+	{
+		slug: 'toolmac',
+		title: 'Toolmac',
+		year: '2025',
+		summary: 'An online tool store for retail shoppers and trade buyers.',
+		cover: cartCovers.toolmac,
+		liveUrl: 'https://toolmac.co.za/',
+		liveLabel: 'Visit the Toolmac store'
 	},
 	{
 		slug: 'zone-of-awareness',
@@ -42,20 +54,12 @@ export const projects: Project[] = [
 	},
 	{
 		slug: 'ascii-image-generator',
-		title: 'ASCII image generator',
+		title: 'Cosmic Archive ASCII',
 		year: '2026',
-		summary:
-			'Four looks: Visor, Blocks, CRT amber, and ANSI. Download PNG, WebP, or JPEG. COPY TEXT and COPY IMAGE. SVG opens through in-process resvg on desktop and web, long side capped at 2048px. The web build is the same app compiled to wasm.',
+		summary: 'A browser and desktop app that turns photos into ASCII and glyph art in seven looks, built in Rust and compiled to WebAssembly.',
 		cover: cartCovers['ascii-image-generator'],
 		liveUrl: 'https://vedalkendev.github.io/ascii-image-generator/',
 		githubUrl: 'https://github.com/vedalkenDev/ascii-image-generator',
-		features: [
-			'Looks: Visor, Blocks, CRT amber, ANSI.',
-			'Download PNG, WebP, or JPEG.',
-			'COPY TEXT and COPY IMAGE.',
-			'SVG opens through in-process resvg on desktop and web, long side capped at 2048px.',
-			'The web build is the same app compiled to wasm.'
-		],
 		stills: [
 			{
 				before: '/work/ascii-image-generator/before-eagle.webp',

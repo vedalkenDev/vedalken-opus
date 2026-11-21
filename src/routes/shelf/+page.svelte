@@ -1,5 +1,28 @@
 <script lang="ts">
-	import { books, coverSrc, coverSrcset } from '#lib/shelf.ts';
+	import { replaceState } from '$app/navigation';
+	import { page } from '$app/state';
+	import { books, coverSrc, coverSrcset, filterKeys, optionsFor, type FilterKey } from '#lib/shelf.ts';
+
+	const groups = filterKeys.map(key => ({ key, options: optionsFor(key) }));
+	const selected = $derived(groups.map(({ key, options }) => {
+		const value = typeof window !== "undefined" ? page.url.searchParams.get(key) : '';
+		return value && options.includes(value) ? value : '';
+	}));
+	const visible = $derived(books.filter(book =>
+		groups.every(({ key }, i) => !selected[i] || book[key] === selected[i])
+	));
+
+	function updateFilter(key?: FilterKey, value = '') {
+		const url = new URL(page.url.href);
+		if (!key) {
+			for (const name of filterKeys) url.searchParams.delete(name);
+		} else if (value) {
+			url.searchParams.set(key, value);
+		} else {
+			url.searchParams.delete(key);
+		}
+		replaceState(url, page.state);
+	}
 
 	const pad = (n: number) => String(n).padStart(3, '0');
 </script>
@@ -10,14 +33,33 @@
 
 <header>
 	<h1>Shelf</h1>
-	<span class="count">{pad(books.length)} {books.length === 1 ? 'volume' : 'volumes'}</span>
+	<span class="count" aria-live="polite">{pad(visible.length)} {visible.length === 1 ? 'volume' : 'volumes'}</span>
 </header>
 
 {#if books.length === 0}
 	<p class="empty">Nothing on the shelf yet.</p>
 {:else}
+	<div class="filters">
+		{#each groups as group, i (group.key)}
+			<label>
+				{group.key}
+				<select value={selected[i]} onchange={(e) => updateFilter(group.key, e.currentTarget.value)}>
+					<option value="">All</option>
+					{#each group.options as option (option)}
+						<option value={option}>{option}</option>
+					{/each}
+				</select>
+			</label>
+		{/each}
+		{#if selected.some(Boolean)}
+			<button onclick={() => updateFilter()}>Clear filters</button>
+		{/if}
+	</div>
+	{#if !visible.length}
+		<p class="empty">No books match these filters.</p>
+	{/if}
 	<ol>
-		{#each books as book, i (book.isbn)}
+		{#each visible as book, i (book.isbn)}
 			{@const src = coverSrc(book)}
 			{@const srcset = coverSrcset(book)}
 			<li>
@@ -37,7 +79,7 @@
 					</div>
 				</div>
 				<div class="meta">
-					<span class="no">No. {pad(i + 1)}</span>
+					<span class="no">No. {pad(books.indexOf(book) + 1)}</span>
 					<span class="title">{book.title}</span>
 					<span class="author">{book.author}</span>
 				</div>
@@ -73,6 +115,29 @@
 		text-transform: uppercase;
 	}
 
+	.filters {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: end;
+		gap: 0.75rem;
+		margin-bottom: 2rem;
+	}
+	label {
+		display: grid;
+		gap: 0.35rem;
+		max-width: 100%;
+		text-transform: capitalize;
+		font-size: 0.8rem;
+	}
+	select, button {
+		font: inherit;
+		color: var(--cream);
+		background: var(--charcoal);
+		border: 1px solid color-mix(in srgb, var(--cream) 40%, transparent);
+		padding: 0.5rem;
+		min-height: 2.5rem;
+		max-width: 100%;
+	}
 	ol {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(min(10.5rem, calc(50% - 0.5rem)), 1fr));

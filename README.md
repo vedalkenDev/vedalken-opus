@@ -104,7 +104,7 @@ Existing Origin `vedalken-dev/vedalken.dev` is a GitHub inbound mirror of the **
 
 `/shelf` is Luqmaan's library. It shows the real covers of books he owns, styled as physical books: spine crease, a glow taken from each cover's colours, and a tilt on hover. He tried an ASCII-generator treatment and rejected it, so do not bring it back.
 
-1. Add `{ "isbn", "title", "author" }` to `src/lib/shelf.json`. ISBNs can include hyphens. Use only books Luqmaan lists. Do not invent any.
+1. Add `{ "isbn", "title", "author" }` to `src/lib/shelf.json`. Include `category` and, for books in a series, `series` to make them filterable. ISBNs can include hyphens. Use only books Luqmaan lists. Do not invent any.
 2. Optional: put a photo of his own edition at `assets/shelf-sources/<isbn>.jpg`. If there is none, the script uses Amazon's full-size cover (about 1700px wide), then falls back to Open Library (333px).
 3. Run `node scripts/shelf.mjs` (add `--force` to rebuild every cover). It writes `static/shelf/<isbn>-600.webp` and `<isbn>-1200.webp`. It needs `cwebp` and `sips` (macOS).
 

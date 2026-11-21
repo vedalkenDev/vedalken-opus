@@ -1,8 +1,13 @@
 [
-	{ "isbn": "978-0-441-01359-3", "title": "Dune", "author": "Frank Herbert" },
-	{ "isbn": "978-0-593-20173-2", "title": "Dune Messiah", "author": "Frank Herbert" },
-	{ "isbn": "978-0-593-20174-9", "title": "Children of Dune", "author": "Frank Herbert" },
-	{ "isbn": "978-0-593-20175-6", "title": "God Emperor of Dune", "author": "Frank Herbert" },
-	{ "isbn": "978-0-593-20176-3", "title": "Heretics of Dune", "author": "Frank Herbert" },
-	{ "isbn": "978-0-593-20177-0", "title": "Chapterhouse: Dune", "author": "Frank Herbert" }
+	{ "isbn": "978-0-441-01359-3", "title": "Dune", "author": "Frank Herbert", "category": "Science Fiction", "series": "Dune", "seriesNo": 1 },
+	{ "isbn": "978-0-593-20173-2", "title": "Dune Messiah", "author": "Frank Herbert", "category": "Science Fiction", "series": "Dune", "seriesNo": 2 },
+	{ "isbn": "978-0-593-20174-9", "title": "Children of Dune", "author": "Frank Herbert", "category": "Science Fiction", "series": "Dune", "seriesNo": 3 },
+	{ "isbn": "978-0-593-20175-6", "title": "God Emperor of Dune", "author": "Frank Herbert", "category": "Science Fiction", "series": "Dune", "seriesNo": 4 },
+	{ "isbn": "978-0-593-20176-3", "title": "Heretics of Dune", "author": "Frank Herbert", "category": "Science Fiction", "series": "Dune", "seriesNo": 5 },
+	{ "isbn": "978-0-593-20177-0", "title": "Chapterhouse: Dune", "author": "Frank Herbert", "category": "Science Fiction", "series": "Dune", "seriesNo": 6 },
+	{ "isbn": "9780316257428", "title": "George Lucas: A Life", "author": "Brian Jay Jones", "category": "Biography" },
+	{ "isbn": "9781455586691", "title": "Deep Work", "author": "Cal Newport", "category": "Productivity" },
+	{ "isbn": "9780140449068", "title": "Around the World in Eighty Days", "author": "Jules Verne", "category": "Adventure Fiction" },
+	{ "isbn": "9780143124177", "title": "Mastery", "author": "Robert Greene", "category": "Personal Development" },
+	{ "isbn": "9780143118527", "title": "The Forty Rules of Love", "author": "Elif Shafak", "category": "Historical Fiction" }
 ]

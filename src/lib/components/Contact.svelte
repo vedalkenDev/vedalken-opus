@@ -1,25 +1,43 @@
 <script lang="ts">
-	let sent = $state(false);
+	const directSend = import.meta.env.VITE_CONTACT_DIRECT_SEND === 'true';
+	let status = $state<'idle' | 'sending' | 'sent' | 'error' | 'mail-app'>('idle');
 
-	function send(event: SubmitEvent) {
+	async function send(event: SubmitEvent) {
 		event.preventDefault();
+		if (status === 'sending') return;
 		const form = event.currentTarget;
 		if (!(form instanceof HTMLFormElement)) return;
 		const data = new FormData(form);
-		const name = String(data.get('name') ?? '').trim();
-		const email = String(data.get('email') ?? '').trim();
-		const message = String(data.get('message') ?? '').trim();
-		const subject = encodeURIComponent(`Cosmic Archive — ${name}`);
-		const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
-		sent = true;
-		window.location.href = `mailto:hello@vedalken.dev?subject=${subject}&body=${body}`;
+		if (!directSend) {
+			const name = String(data.get('name') ?? '').trim();
+			const email = String(data.get('email') ?? '').trim();
+			const message = String(data.get('message') ?? '').trim();
+			const subject = encodeURIComponent(`Cosmic Archive — ${name}`);
+			const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
+			status = 'mail-app';
+			window.location.href = `mailto:hello@vedalken.dev?subject=${subject}&body=${body}`;
+			return;
+		}
+		status = 'sending';
+		try {
+			const response = await fetch('/api/contact', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+				body: JSON.stringify({ name: data.get('name'), email: data.get('email'), message: data.get('message'), website: data.get('website') })
+			});
+			if (!response.ok) throw new Error('Submission failed');
+			form.reset();
+			status = 'sent';
+		} catch {
+			status = 'error';
+		}
 	}
 </script>
 
 <section id="contact">
 	<h1>Contact</h1>
 	<form class="panel" onsubmit={send}>
-		<p class="lede">A note for the archive. It opens in your mail app.</p>
+		<p class="lede">A note for the archive.{directSend ? '' : ' It opens in your mail app.'}</p>
 		<div class="pair">
 			<label>
 				<span>name</span>
@@ -34,9 +52,12 @@
 			<span>message</span>
 			<textarea name="message" rows="7" required maxlength="2000"></textarea>
 		</label>
+		<div class="trap" aria-hidden="true">
+			<label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+		</div>
 		<div class="actions">
-			<button type="submit">&gt; send</button>
-			<p class="status" role="status">{sent ? 'Opening your mail app.' : ''}</p>
+			<button type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Sending…' : '> send'}</button>
+			<p class="status" role="status">{status === 'sent' ? 'Message sent. Thank you.' : status === 'error' ? 'Could not send. Please try again or email me directly.' : status === 'mail-app' ? 'Opening your mail app.' : ''}</p>
 			<a class="direct" href="mailto:hello@vedalken.dev">hello@vedalken.dev</a>
 		</div>
 	</form>
@@ -116,10 +137,19 @@
 		outline-offset: 1px;
 	}
 
+	.trap {
+		position: absolute;
+		left: -10000px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
 	.actions {
 		display: flex;
 		align-items: baseline;
 		gap: 0.8rem;
+		flex-wrap: wrap;
 	}
 
 	.direct {

@@ -16,6 +16,8 @@ Before enabling the endpoint, apply a Vercel firewall rate-limit rule for `/api/
 
 Configure and test in an isolated preview environment before enabling production. Use a test message only with explicit authorization, verify it arrives in the mailbox and that replying targets the visitor's address, and verify the error path. The Vercel function and SMTP delivery cannot be verified by the ordinary Vite development server alone.
 
+The three variables above are configured for the `prepare/contact-email` preview branch only. Production remains on the mail-app flow until separately configured and deployed.
+
 ## Checks
 
 - `npm run test:contact` exercises validation, disabled configuration, delivery options, spam trap, and failure reporting with a mocked transport.

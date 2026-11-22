@@ -57,11 +57,6 @@
 		y = event.clientY;
 	}
 
-	function focus(event: FocusEvent) {
-		const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-		showAt(rect.left + rect.width / 2, rect.top);
-	}
-
 	function leave() {
 		on = false;
 		if (!video) return;
@@ -75,15 +70,11 @@
 </script>
 
 <span class="wrap"
-	><span
+	><!-- svelte-ignore a11y_no_static_element_interactions (The preview is decorative and provides no additional content.) --><span
 		class="word"
-		role="button"
-		tabindex="0"
 		onmouseenter={enter}
 		onmousemove={move}
-		onmouseleave={leave}
-		onfocus={focus}
-		onblur={leave}>{@render children()}</span
+		onmouseleave={leave}>{@render children()}</span
 	>{#if image}
 		<img
 			class="float project"
@@ -117,9 +108,12 @@
 	}
 
 	.word {
-		border-bottom: 1px dotted currentColor;
 		font: inherit;
 		color: inherit;
+	}
+
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+		.word { border-bottom: 1px dotted currentColor; }
 	}
 
 	.float {

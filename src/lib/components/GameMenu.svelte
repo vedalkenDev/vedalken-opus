@@ -199,4 +199,15 @@
 			-1px 0 var(--teal);
 	}
 	.shortcut:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
+
+	@media (max-width: 960px) {
+		.shortcut {
+			position: static;
+			display: inline-flex;
+			align-items: center;
+			min-height: 44px;
+			margin-top: 0.25rem;
+			padding: 0.2rem 0;
+		}
+	}
 </style>

@@ -60,13 +60,12 @@
 			<a href="/shelf">Shelf</a>
 			<a href="/about">About</a>
 		</nav>
+		<GameMenu />
 	</header>
 	<main>
 		{@render children()}
 	</main>
 </div>
-
-<GameMenu />
 
 <style>
 	:global(main) { view-transition-name: archive-page; }

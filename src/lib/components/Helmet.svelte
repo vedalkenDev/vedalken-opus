@@ -85,6 +85,9 @@
 
 	let cue = $state<WeatherCue | null>(null);
 	let stage: HTMLDivElement | undefined;
+	let home: HTMLDivElement | undefined;
+	let docked = $state(false);
+	let moving = $state(false);
 	let canvas: HTMLCanvasElement | undefined;
 
 	const hexRgb = (hex: string) => {
@@ -372,6 +375,9 @@
 
 	onMount(() => {
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const mobile = window.matchMedia('(max-width: 720px)');
+		let moveTimer = 0;
+		let desiredDock = false;
 		let tx = 0;
 		let ty = 0;
 		let yaw = 0;
@@ -505,6 +511,7 @@
 			if (raf === 0) raf = requestAnimationFrame(draw);
 		};
 
+
 		const armReveal = () => {
 			if (revealAt !== 0) return;
 			revealAt = performance.now();
@@ -533,7 +540,7 @@
 		};
 
 		const move = (event: PointerEvent) => {
-			if (reduce.matches || event.pointerType !== 'mouse' || !stage) {
+			if (reduce.matches || !stage || (event.pointerType !== 'mouse' && !(mobile.matches && event.pointerType === 'touch'))) {
 				rest();
 				return;
 			}
@@ -558,13 +565,13 @@
 			if (!canvas || !ctx) return;
 
 			const dpr = Math.min(2, window.devicePixelRatio || 1);
-			const cssW = stageW;
+			const cssW = docked ? Math.max(stageW, 384) : stageW;
 			const cssH = cssW * ((ROWS * CELL_H) / (COLS * CELL_W));
 			if (canvas.width !== Math.round(cssW * dpr) || canvas.height !== Math.round(cssH * dpr)) {
 				canvas.width = Math.round(cssW * dpr);
 				canvas.height = Math.round(cssH * dpr);
-				canvas.style.width = `${cssW}px`;
-				canvas.style.height = `${cssH}px`;
+				canvas.style.width = '100%';
+				canvas.style.height = 'auto';
 			}
 			// Resizing the canvas resets context state, so set text state every frame. It is cheap
 			// when the string is unchanged.
@@ -766,7 +773,8 @@
 		}
 
 		const down = (event: PointerEvent) => {
-			if (event.pointerType !== 'mouse') rest();
+			if (event.pointerType === 'touch' && mobile.matches) move(event);
+			else if (event.pointerType !== 'mouse') rest();
 		};
 
 		const loadWeather = async () => {
@@ -788,13 +796,37 @@
 		});
 		if (stage) resize.observe(stage);
 
+		const updateDock = () => {
+			if (!home) return;
+			const rect = home.getBoundingClientRect();
+			const nextDock = rect.bottom <= 0;
+			if (nextDock === desiredDock) return;
+			desiredDock = nextDock;
+			window.clearTimeout(moveTimer);
+			moving = !reduce.matches;
+			const transfer = () => {
+				docked = desiredDock;
+				onScreen = docked || (rect.bottom > 0 && rect.top < window.innerHeight);
+				if (docked && !reduce.matches) revealAt = performance.now();
+				else if (reduce.matches) revealAt = performance.now() - 4000;
+				moving = false;
+				kick();
+			};
+			if (reduce.matches) transfer();
+			else moveTimer = window.setTimeout(transfer, 180);
+		};
+
 		const visibility = new IntersectionObserver((entries) => {
 			const entry = entries[entries.length - 1];
 			if (!entry) return;
-			onScreen = entry.isIntersecting;
+			onScreen = docked || entry.isIntersecting;
 			if (onScreen) kick();
+			updateDock();
 		});
-		if (stage) visibility.observe(stage);
+		if (home) visibility.observe(home);
+		window.addEventListener('scroll', updateDock, { passive: true });
+		mobile.addEventListener('change', updateDock);
+		updateDock();
 
 		reduce.addEventListener('change', kick);
 
@@ -808,6 +840,9 @@
 			revealWatch?.disconnect();
 			resize.disconnect();
 			visibility.disconnect();
+			window.clearTimeout(moveTimer);
+			window.removeEventListener('scroll', updateDock);
+			mobile.removeEventListener('change', updateDock);
 			reduce.removeEventListener('change', kick);
 			cancelAnimationFrame(raf);
 			window.clearTimeout(weatherTimer);
@@ -818,8 +853,10 @@
 	});
 </script>
 
-<div bind:this={stage} class="stage" aria-hidden="true">
-	<canvas bind:this={canvas} class="helmet"></canvas>
+<div bind:this={home} class="home" style:aspect-ratio="{COLS * CELL_W} / {ROWS * CELL_H}">
+	<div bind:this={stage} class="stage" class:docked class:moving>
+		<canvas bind:this={canvas} class="helmet" aria-hidden="true"></canvas>
+	</div>
 </div>
 
 <style>
@@ -832,11 +869,33 @@
 		-webkit-user-drag: none;
 	}
 
-	.stage {
+	.home {
 		position: relative;
 		width: min(24rem, 72%);
 		margin: 1.25rem auto 0.5rem;
+	}
+
+	.stage {
+		position: relative;
+		width: 100%;
 		pointer-events: none;
+		transition: opacity 180ms ease;
+	}
+
+	.stage.moving {
+		opacity: 0;
+	}
+
+	.stage.docked {
+		position: fixed;
+		width: min(27vw, 7.5rem);
+		right: max(0.75rem, env(safe-area-inset-right));
+		bottom: max(0.75rem, env(safe-area-inset-bottom));
+		z-index: 7;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.stage { transition: none; }
 	}
 
 	.helmet {

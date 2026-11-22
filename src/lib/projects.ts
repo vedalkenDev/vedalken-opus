@@ -11,6 +11,9 @@ export type Project = {
 	title: string;
 	year: string;
 	summary: string;
+	role?: string;
+	result?: string;
+	preview?: string;
 	cover: CartCover;
 	liveUrl?: string;
 	liveLabel?: string;
@@ -21,42 +24,37 @@ export type Project = {
 
 export const projects: Project[] = [
 	{
-		slug: 'plancheck',
-		title: 'PlanCheck',
-		year: '2026',
-		summary: 'A pre-submission drawing check for South African architects.',
-		liveUrl: 'https://plancheck.vedalken.dev/waitlist',
-		liveLabel: 'Join the PlanCheck waitlist',
-		cover: cartCovers.plancheck
-	},
-	{
 		slug: 'toolmac',
 		title: 'Toolmac',
 		year: '2025',
-		summary: 'An online tool store for retail shoppers and trade buyers.',
+		summary: 'An online store for retail shoppers and trade buyers.',
+		role: 'Research, design & development',
+		result: 'Homepage load: 12 sec → 0.5 sec',
+		preview: '/work/toolmac/storefront.webp',
 		cover: cartCovers.toolmac,
 		liveUrl: 'https://toolmac.co.za/',
 		liveLabel: 'Visit the Toolmac store'
 	},
 	{
-		slug: 'zone-of-awareness',
-		title: 'Zone of Awareness',
+		slug: 'plancheck',
+		title: 'PlanCheck',
 		year: '2026',
-		summary: 'In progress.',
-		cover: cartCovers['zone-of-awareness']
-	},
-	{
-		slug: 'burning-wish',
-		title: 'Burning Wish',
-		year: '2026',
-		summary: 'In progress.',
-		cover: cartCovers['burning-wish']
+		summary: 'A pre-submission drawing check for South African architects.',
+		role: 'Founder, product design & development',
+		result: 'Testing with six beta users',
+		preview: '/work/plancheck/poster.png',
+		liveUrl: 'https://plancheck.vedalken.dev/waitlist',
+		liveLabel: 'Join the PlanCheck waitlist',
+		cover: cartCovers.plancheck
 	},
 	{
 		slug: 'ascii-image-generator',
 		title: 'Cosmic Archive ASCII',
 		year: '2026',
-		summary: 'A browser and desktop app that turns photos into ASCII and glyph art in seven looks, built in Rust and compiled to WebAssembly.',
+		summary: 'A Rust app that turns photos into glyph art on the web and desktop.',
+		role: 'Design & engineering',
+		result: 'Hover rendering: 19.4 ms → 2.0 ms per frame',
+		preview: '/work/ascii-image-generator/cells-80-columns.webp',
 		cover: cartCovers['ascii-image-generator'],
 		liveUrl: 'https://vedalkendev.github.io/ascii-image-generator/',
 		githubUrl: 'https://github.com/vedalkenDev/ascii-image-generator',
@@ -80,3 +78,33 @@ export const projects: Project[] = [
 export function getProject(slug: string) {
 	return projects.find((project) => project.slug === slug);
 }
+
+// Additional work from Luqmaan's CV.
+export const additionalWork = [
+	{
+		slug: 'bargain-xpress',
+		title: 'Bargain Xpress',
+		url: 'https://bargainxpress.co.za/',
+		image: '/work/additional/bargain-xpress.webp',
+		summary: 'Designed and built a retail site in WordPress and Divi with Cerebro Creative’s senior director.'
+	},
+	{
+		slug: 'bargain-wholesalers',
+		title: 'Bargain Wholesalers',
+		url: 'https://bargainwholesalers.co.za/',
+		image: '/work/additional/bargain-wholesalers.webp',
+		summary: 'Designed and built a wholesale site in WordPress and Divi with Cerebro Creative’s senior director.'
+	},
+	{
+		slug: 'mip-brands',
+		title: 'MIP Brands',
+		image: '/work/additional/mip-brands.webp',
+		summary: 'Designed and built the site in WordPress and Divi with Cerebro Creative’s senior director.',
+		url: 'https://mipbrands.co.za/'
+	},
+	{
+		title: 'AI agents and studio tools',
+		graphic: 'agents',
+		summary: 'Built internal AI agents and a content repurposing system for Cerebro Creative, including catalogue maintenance for supermarket websites.'
+	}
+];

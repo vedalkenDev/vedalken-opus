@@ -5,7 +5,7 @@
 
 	let { cover }: { cover: CartCover } = $props();
 	let host: HTMLDivElement | undefined;
-	let canvas: HTMLCanvasElement | undefined;
+	let canvas = $state<HTMLCanvasElement | undefined>(undefined);
 
 	const paint = () => {
 		if (cover.art) return;
@@ -52,7 +52,6 @@
 	});
 
 	onMount(() => {
-		if (cover.art) return;
 		const observer = new ResizeObserver(() => paint());
 		if (host) observer.observe(host);
 		paint();

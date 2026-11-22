@@ -1,6 +1,9 @@
+<script lang="ts">
+	import CaseMetric from '#lib/components/CaseMetric.svelte';
+</script>
+
 <article>
 <p><strong>Drop in a photo, pick a look, and get ASCII art you can copy or save.</strong></p>
-<p><a href="https://vedalkendev.github.io/ascii-image-generator/">Try it in the browser</a> · <a href="https://github.com/vedalkenDev/ascii-image-generator">Source on GitHub</a></p>
 <p><img loading="lazy" decoding="async" src="/work/ascii-image-generator/cells-80-columns.webp" alt="Cells mode at 80 columns"></p>
 <p><strong>Role</strong> · Design and engineering</p>
 <h2>What it is</h2>
@@ -70,7 +73,7 @@
 </ul>
 <hr>
 <h2>Work log: interface simplification and performance</h2>
-<p>This part of the project focused on making the app easier to read and fast to use. The work shipped as three pull requests over two days, each merged to <code>main</code> and auto-deployed.</p>
+<p>I simplified the interface and improved performance across three pull requests, each merged to <code>main</code> and deployed.</p>
 <h3>1. Simplified the sidebar (<a href="https://github.com/vedalkenDev/ascii-image-generator/pull/17">PR #17</a>)</h3>
 <p><strong>Problem.</strong> The sidebar had grown into a long settings form. Choices and refinements sat side by side, so it was hard to tell what mattered first.</p>
 <p><strong>What changed:</strong></p>
@@ -104,6 +107,9 @@
 <li><strong>Smaller, faster build.</strong> The release build now optimises across the whole program (<code>lto = &quot;fat&quot;</code>, one codegen unit). The WebAssembly download dropped from 8.5MB to 7.7MB.</li>
 </ul>
 <p><strong>Results</strong> (12MP photo, 400 columns, headless Chrome on an Apple M1 GPU):</p>
+<CaseMetric title="Cells · work per frame while hovering" before={19.4} after={2.0} unit="ms" context="12MP photo, 400 columns, headless Chrome on an Apple M1 GPU." />
+<CaseMetric title="Cells · columns slider drag" before={1433} after={462} unit="ms" context="12MP photo, 400 columns, headless Chrome on an Apple M1 GPU." />
+<CaseMetric title="WebAssembly download" before={8.47} after={7.67} unit="MB" context="Release build size before and after optimisation." />
 <div class="table-wrap">
 <table>
 <thead>

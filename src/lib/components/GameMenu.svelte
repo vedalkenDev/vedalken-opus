@@ -75,11 +75,12 @@
 <button
 	type="button"
 	class="shortcut"
+	aria-keyshortcuts="Control+K Meta+K"
 	aria-haspopup="dialog"
 	aria-controls="game-menu"
 	onclick={open}
 >
-	{shortcut}
+	Index · {shortcut}
 </button>
 
 <dialog
@@ -97,6 +98,7 @@
 				href={item.href}
 				class:on={i === selected}
 				onmouseenter={() => (selected = i)}
+				onfocus={() => (selected = i)}
 				onclick={close}
 			>
 				<span class="cursor" aria-hidden="true">{i === selected ? '>' : ' '}</span>
@@ -154,11 +156,12 @@
 	a:hover,
 	a:focus-visible,
 	a.on {
-		outline: none;
 		text-shadow:
 			1px 0 var(--coral),
 			-1px 0 var(--teal);
 	}
+
+	a:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
 
 	.cursor {
 		display: inline-block;
@@ -185,15 +188,15 @@
 		font: inherit;
 		font-size: 0.75rem;
 		letter-spacing: 0.08em;
-		opacity: 0.45;
+		opacity: 0.8;
 	}
 
 	.shortcut:hover,
 	.shortcut:focus-visible {
 		opacity: 0.95;
-		outline: none;
 		text-shadow:
 			1px 0 var(--coral),
 			-1px 0 var(--teal);
 	}
+	.shortcut:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
 </style>

@@ -1,15 +1,51 @@
 <script lang="ts">
-	import favicon from '#lib/assets/favicon.svg';
+	import { onNavigate } from '$app/navigation';
+	import { page } from '$app/state';
+	import { metadataFor } from '#lib/metadata.ts';
 	import GameMenu from '#lib/components/GameMenu.svelte';
 	import Stars from '#lib/components/Stars.svelte';
 	import type { LayoutProps } from './$types';
 
 	let { children }: LayoutProps = $props();
+	const metadata = $derived(metadataFor(page.url.pathname));
+
+	onNavigate((navigation) => {
+		if (
+			navigation.from?.url.pathname === navigation.to?.url.pathname ||
+			!document.startViewTransition ||
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		) return;
+
+		return new Promise<void>((resolve) => {
+			const transition = document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+			// If the browser cannot start a transition, navigation must still continue.
+			transition.ready.catch(() => resolve());
+		});
+	});
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
-	<title>Luqmaan Sayed</title>
+	<link rel="icon" type="image/png" href="/favicon.png" />
+	<title>{metadata.title}</title>
+	<meta name="description" content={metadata.description} />
+	<link rel="canonical" href={metadata.url} />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Luqmaan Sayed · Cosmic Archive" />
+	<meta property="og:title" content={metadata.title} />
+	<meta property="og:description" content={metadata.description} />
+	<meta property="og:url" content={metadata.url} />
+	<meta property="og:image" content={metadata.image} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="Luqmaan Sayed, creative web developer, with a pixel-art space helmet." />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={metadata.title} />
+	<meta name="twitter:description" content={metadata.description} />
+	<meta name="twitter:image" content={metadata.image} />
+	<meta name="twitter:image:alt" content="Luqmaan Sayed, creative web developer, with a pixel-art space helmet." />
 </svelte:head>
 
 <Stars />
@@ -17,7 +53,7 @@
 <div class="site">
 	<header>
 		<p class="name">Luqmaan Sayed</p>
-		<p class="role">web designer and developer</p>
+		<p class="role">Creative web developer</p>
 		<nav aria-label="Primary">
 			<a href="/">Home</a>
 			<a href="/work">Work</a>
@@ -33,6 +69,17 @@
 <GameMenu />
 
 <style>
+	:global(main) { view-transition-name: archive-page; }
+	:global(::view-transition-old(root)),
+	:global(::view-transition-new(root)) { animation: none; }
+	:global(::view-transition-old(archive-page)) { animation: archive-leave 130ms ease-in both; }
+	:global(::view-transition-new(archive-page)) { animation: archive-enter 220ms cubic-bezier(.22, 1, .36, 1) both; }
+	@keyframes archive-leave { to { opacity: 0; transform: translateY(-4px); } }
+	@keyframes archive-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+	@media (prefers-reduced-motion: reduce) {
+		:global(::view-transition-old(archive-page)), :global(::view-transition-new(archive-page)) { animation: none; }
+	}
+
 	:global(:root) {
 		--ground: #050508;
 		--charcoal: #242a30;
@@ -154,8 +201,12 @@
 	}
 
 	.role {
-		margin: 0.25rem 0 1rem;
-		opacity: 0.7;
+		margin: 0.25rem 0 1.15rem;
+		font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+		font-weight: 700;
+		line-height: 1.25;
+		letter-spacing: -0.02em;
+		color: var(--cream);
 	}
 
 	nav {

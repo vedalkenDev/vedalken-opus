@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
 
-	let { src, children }: { src: string; children: Snippet } = $props();
+	let { src, children, image = false, project = false, poster }: { src: string; children: Snippet; image?: boolean; project?: boolean; poster?: string } = $props();
 
 	let on = $state(false);
 	let x = $state(0);
@@ -18,7 +18,7 @@
 	}
 
 	onMount(() => {
-		if (!allowed()) return;
+		if (!allowed() || image) return;
 		// Fetch after the page settles so first hover still plays at once.
 		const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1200));
 		const cancel = window.cancelIdleCallback ?? window.clearTimeout;
@@ -84,9 +84,20 @@
 		onmouseleave={leave}
 		onfocus={focus}
 		onblur={leave}>{@render children()}</span
-	><video
+	>{#if image}
+		<img
+			class="float project"
+			class:show={on}
+			style:left="{x}px"
+			style:top="{y}px"
+			{src}
+			alt=""
+			aria-hidden="true"
+		/>
+	{:else}<video
 		bind:this={video}
 		class="float"
+		class:project
 		class:show={on}
 		style:left="{x}px"
 		style:top="{y}px"
@@ -94,9 +105,10 @@
 		muted
 		loop
 		playsinline
+		{poster}
 		preload={armed ? 'auto' : 'none'}
 		aria-hidden="true"
-	></video></span
+	></video>{/if}</span
 >
 
 <style>
@@ -122,6 +134,14 @@
 		border: 1px solid var(--cream);
 		opacity: 0;
 		visibility: hidden;
+	}
+
+	.float.project {
+		width: min(20rem, 70vw);
+		aspect-ratio: 16 / 9;
+		object-fit: contain;
+		background: var(--ground);
+		mix-blend-mode: normal;
 	}
 
 	.float.show {

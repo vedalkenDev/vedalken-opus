@@ -1,11 +1,30 @@
+<script lang="ts">
+	import PlanFlow from '#lib/components/PlanFlow.svelte';
+	import CaseRoute from '#lib/components/CaseRoute.svelte';
+	import CaseFacts from '#lib/components/CaseFacts.svelte';
+</script>
+
 <article>
 <h2>The drawing should fail in your office, not at the counter</h2>
 <p>I designed and built a web app that scans South African building plans and checks them against SANS 10400 and zoning rules, so an architect sees what fails before the plan goes to council.</p>
+<video
+	aria-label="PlanCheck product demo, from drawing upload to report"
+	src="/work/plancheck/demo.mp4"
+	poster="/work/plancheck/poster.png"
+	width="1920"
+	height="1080"
+	preload="none"
+	controls
+	playsinline
+	muted
+>
+	<a href="/work/plancheck/demo.mp4">Download the PlanCheck demo</a>
+</video>
 <dl>
 <dt>Role</dt><dd>Founder, product designer and developer</dd>
 <dt>Timeline</dt><dd>2026, ongoing</dd>
 <dt>Tools</dt><dd>Next.js, shadcn/ui, Tailwind CSS, Vercel, Supabase, Cursor cloud agents</dd>
-<dt>Team</dt><dd>Just me, building with AI coding agents in Cursor, with architects I trust supplying real drawings to test against</dd>
+<dt>Team</dt><dd>Me, with Cursor coding agents and architects supplying drawings for testing</dd>
 </dl>
 <h2>The problem</h2>
 <p>In South Africa, building plans go to the local municipality for approval, and SANS 10400 is the national rulebook they&#x27;re checked against. If one item is missing, the plan comes back and the architect starts again.</p>
@@ -21,9 +40,12 @@
 <h2>Process</h2>
 <h3>Research</h3>
 <p>I mapped SANS 10400 from Part A to Part XA into an index of parts and headings, and read the clauses that matter most on a drawing, such as window details, glass sizes and the 15% glazing limit in Part XA. I ran real plans from practising architects through the checks. I&#x27;m talking to architects in an ongoing group, and PlanCheck has 6 beta testers.</p>
+<CaseFacts title="Testing with architects" facts={[{ value: '6', label: 'beta testers' }, { value: 'PDF', label: 'core submission format' }]} note="Early beta; no accuracy figure is claimed." />
 <h3>The pivot to PDF</h3>
 <p>PlanCheck started with CAD files. I moved the core flow to scanning PDFs, and it still reads DWG and DXF files. Architects use different CAD programs, but every one of them has to export the plan to PDF for submission. A PDF works for every architect, whatever software drew it.</p>
 <p>I replaced the default PDF viewer with my own, built on the PDF support that modern browsers already have.</p>
+<CaseRoute title="The pivot to PDF" sources={['Different CAD tools', 'Scanned drawings', 'Digital plans']} destination="PDF submission" note="PDF is the core flow; the app can also read DWG and DXF." />
+<PlanFlow />
 <h3>Key decisions</h3>
 <p>One upload, one answer. The architect adds a plan, and PlanCheck returns a report. Architects want a verdict, not another tool to learn.</p>
 <p>Every fail says what to change. Each failed check names the regulation it breaks and the change to make on the drawing, with a number when there is one. Telling someone they failed isn&#x27;t useful on its own. Fixing the plan is the job.</p>
@@ -42,21 +64,9 @@
 </ul>
 <h2>Outcome</h2>
 <p>PlanCheck is live at plancheck.vedalken.dev behind sign-in, with a waitlist at /waitlist and 6 beta testers. The 24-second demo shows the flow from upload to report. It&#x27;s early, and I&#x27;m not quoting accuracy figures.</p>
-<video
-	aria-label="PlanCheck product demo, from drawing upload to report"
-	src="/work/plancheck/demo.mp4"
-	poster="/work/plancheck/poster.png"
-	width="1920"
-	height="1080"
-	preload="none"
-	controls
-	playsinline
-	muted
->
-	<a href="/work/plancheck/demo.mp4">Download the PlanCheck demo</a>
-</video>
+
 <h2>What I learned and what&#x27;s next</h2>
-<p>User feedback is what improves the product. When you can build almost anything, what users tell you and the shape of the market matter most. I was adding feature after feature to PlanCheck without checking whether architects needed them. Their feedback is what makes PlanCheck stronger now, and learning to hear it, understand it and act on it has been the most valuable part of the project.</p>
+<p>I was adding features without checking whether architects needed them. Now I use their feedback to decide what to build next.</p>
 </article>
 
 <style>

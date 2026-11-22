@@ -2,7 +2,6 @@
 	import CosmicArchiveAscii from '#lib/case-studies/cosmic-archive-ascii.svelte';
 	import PlanCheck from '#lib/case-studies/plancheck.svelte';
 	import Toolmac from '#lib/case-studies/toolmac.svelte';
-	import CartShot from '#lib/components/CartShot.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -13,10 +12,14 @@
 
 <h1>{project.title}</h1>
 <p class="year">{project.year}</p>
-{#if project.slug !== 'toolmac'}
-	<div class="cover">
-		<CartShot cover={project.cover} />
-	</div>
+<p class="overview">{project.summary}</p>
+{#if project.role}<p class="role"><strong>My role</strong> · {project.role}</p>{/if}
+{#if project.result}<p class="result">{project.result}</p>{/if}
+{#if project.liveUrl || project.githubUrl}
+	<p class="links">
+		{#if project.liveUrl}<a href={project.liveUrl} rel="noreferrer">{project.liveLabel ?? 'Try the generator'}</a>{/if}
+		{#if project.githubUrl}<a href={project.githubUrl} rel="noreferrer">GitHub</a>{/if}
+	</p>
 {/if}
 {#if project.slug === 'plancheck'}
 	<PlanCheck />
@@ -32,17 +35,6 @@
 	</ul>
 {:else}
 	<p>{project.summary}</p>
-{/if}
-
-{#if project.slug !== 'ascii-image-generator' && (project.liveUrl || project.githubUrl)}
-	<p class="links">
-		{#if project.liveUrl}
-			<a href={project.liveUrl} rel="noreferrer">{project.liveLabel ?? 'Open the generator'}</a>
-		{/if}
-		{#if project.githubUrl}
-			<a href={project.githubUrl} rel="noreferrer">GitHub</a>
-		{/if}
-	</p>
 {/if}
 
 {#if project.stills?.length}
@@ -66,6 +58,14 @@
 	:global(article dt) { font-weight: bold; }
 	:global(article dd) { margin: 0 0 .6rem; }
 
+	.overview { font-size: 1.1rem; line-height: 1.5; max-width: 50ch; }
+	.role { color: color-mix(in srgb, var(--cream) 80%, transparent); font-size: 0.85rem; }
+	.result { color: #dfb990; }
+	.links { margin-bottom: 2rem; }
+	:global(article h3) { margin: 1.5rem 0 0.5rem; line-height: 1.3; }
+	:global(article p), :global(article li) { line-height: 1.7; }
+	:global(article a) { text-underline-offset: 0.2em; }
+
 	.back {
 		margin: 0 0 1.5rem;
 	}
@@ -73,15 +73,6 @@
 	.year {
 		margin: 0 0 1rem;
 		opacity: 0.55;
-	}
-
-	.cover {
-		width: min(20rem, 100%);
-		height: 16rem;
-		margin: 0 0 1.25rem;
-		padding: 0.45rem;
-		border: 1px solid color-mix(in srgb, var(--cream) 22%, transparent);
-		background: color-mix(in srgb, var(--cream) 4%, var(--ground));
 	}
 
 	.features {

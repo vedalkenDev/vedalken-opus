@@ -36,7 +36,7 @@
 		</label>
 		<div class="actions">
 			<button type="submit">&gt; send</button>
-			<p class="status">{sent ? 'Opening your mail app.' : ''}</p>
+			<p class="status" role="status">{sent ? 'Opening your mail app.' : ''}</p>
 			<a class="direct" href="mailto:hello@vedalken.dev">hello@vedalken.dev</a>
 		</div>
 	</form>

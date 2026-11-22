@@ -1,38 +1,36 @@
 <script lang="ts">
-	import { projects } from '#lib/projects.ts';
+	import { projects, additionalWork } from '#lib/projects.ts';
 </script>
 
 <h1>Work</h1>
-
 <ul>
 	{#each projects as project}
 		<li>
 			<a href="/work/{project.slug}">{project.title}</a>
-			<span class="year">{project.year}</span>
+			<span class="summary">{project.summary}</span>
+			{#if project.result}<span class="result">{project.result}</span>{/if}
+		</li>
+	{/each}
+</ul>
+<h2>More work</h2>
+<ul>
+	{#each additionalWork as item}
+		<li>
+			{#if item.slug}
+				<a href="/work/more/{item.slug}">{item.title}</a>
+			{:else}
+				<a href="/#work">{item.title}</a>
+			{/if}
+			<span class="summary">{item.summary}</span>
 		</li>
 	{/each}
 </ul>
 
 <style>
-	ul {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	li {
-		display: flex;
-		justify-content: space-between;
-		gap: 1rem;
-		border-top: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
-		padding: 0.65rem 0;
-	}
-
-	li:last-child {
-		border-bottom: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
-	}
-
-	.year {
-		opacity: 0.55;
-	}
+	h2 { margin-top: 2.5rem; font-size: 1rem; }
+	ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--cream) 22%, transparent); }
+	li { display: grid; gap: 0.2rem; border-bottom: 1px solid color-mix(in srgb, var(--cream) 22%, transparent); padding: 0.9rem 0; }
+	a { width: fit-content; font-weight: 700; text-underline-offset: 0.2em; }
+	.summary { color: color-mix(in srgb, var(--cream) 75%, transparent); font-size: 0.85rem; }
+	.result { color: #dfb990; font-size: 0.8rem; }
 </style>

@@ -223,7 +223,7 @@
 		background: color-mix(in srgb, var(--sage) 13%, transparent);
 	}
 	.folder-list button.active {
-		border-color: color-mix(in srgb, var(--sage) 55%, transparent);
+		border-color: color-mix(in srgb, var(--sage) 90%, transparent);
 	}
 	.folder-list button:focus-visible {
 		outline: 2px solid var(--cream);

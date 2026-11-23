@@ -1,5 +1,10 @@
 <script lang="ts">
 	const directSend = import.meta.env.VITE_CONTACT_DIRECT_SEND === 'true';
+	let errors = $state<Record<string, string>>({});
+	function validate(input: HTMLInputElement | HTMLTextAreaElement) {
+		const value = input.value.trim();
+		errors[input.name] = !value ? 'Please fill in this field.' : input.type === 'email' && !input.validity.valid ? 'Please enter a valid email address.' : '';
+	}
 	let status = $state<'idle' | 'sending' | 'sent' | 'error' | 'mail-app'>('idle');
 
 	async function send(event: SubmitEvent) {
@@ -7,6 +12,9 @@
 		if (status === 'sending') return;
 		const form = event.currentTarget;
 		if (!(form instanceof HTMLFormElement)) return;
+		const fields = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]'));
+		fields.forEach(validate);
+		if (fields.some((field) => errors[field.name])) { fields.find((field) => errors[field.name])?.focus(); return; }
 		const data = new FormData(form);
 		if (!directSend) {
 			const name = String(data.get('name') ?? '').trim();
@@ -35,22 +43,25 @@
 </script>
 
 <section id="contact">
-	<h1>Contact</h1>
-	<form class="panel" onsubmit={send}>
+	<h2>Contact</h2>
+	<form class="panel" onsubmit={send} novalidate>
 		<p class="lede">A note for the archive.{directSend ? '' : ' It opens in your mail app.'}</p>
 		<div class="pair">
 			<label>
 				<span>name</span>
-				<input name="name" autocomplete="name" required maxlength="80" />
+				<input name="name" autocomplete="name" required maxlength="80" aria-invalid={!!errors.name} aria-describedby={errors.name ? "error-name" : undefined} oninput={(e) => { if (errors.name) validate(e.currentTarget); }} />
+				{#if errors.name}<span id="error-name" class="field-error">{errors.name}</span>{/if}
 			</label>
 			<label>
 				<span>email</span>
-				<input name="email" type="email" autocomplete="email" required maxlength="120" />
+				<input name="email" type="email" autocomplete="email" required maxlength="120" aria-invalid={!!errors.email} aria-describedby={errors.email ? "error-email" : undefined} oninput={(e) => { if (errors.email) validate(e.currentTarget); }} />
+				{#if errors.email}<span id="error-email" class="field-error">{errors.email}</span>{/if}
 			</label>
 		</div>
 		<label>
 			<span>message</span>
-			<textarea name="message" rows="7" required maxlength="2000"></textarea>
+			<textarea name="message" rows="7" required maxlength="2000" aria-invalid={!!errors.message} aria-describedby={errors.message ? "error-message" : undefined} oninput={(e) => { if (errors.message) validate(e.currentTarget); }}></textarea>
+			{#if errors.message}<span id="error-message" class="field-error">{errors.message}</span>{/if}
 		</label>
 		<div class="trap" aria-hidden="true">
 			<label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
@@ -74,7 +85,7 @@
 		width: 100%;
 		margin-top: 0.4rem;
 		padding: 1.25rem 1.35rem 1.15rem;
-		border: 1px solid color-mix(in srgb, var(--cream) 28%, transparent);
+		border: 1px solid color-mix(in srgb, var(--cream) 48%, transparent);
 		background: color-mix(in srgb, var(--cream) 4%, var(--ground));
 		box-shadow:
 			1px 0 var(--coral),
@@ -107,16 +118,16 @@
 		font-size: 0.68rem;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		opacity: 0.8;
 	}
 
 	input,
 	textarea {
+		min-height: 44px;
 		width: 100%;
 		box-sizing: border-box;
 		margin: 0;
 		padding: 0.45rem 0.5rem;
-		border: 1px solid color-mix(in srgb, var(--cream) 22%, transparent);
+		border: 1px solid color-mix(in srgb, var(--cream) 55%, transparent);
 		border-radius: 0;
 		background: var(--ground);
 		color: var(--cream);
@@ -133,7 +144,7 @@
 
 	input:focus-visible,
 	textarea:focus-visible {
-		outline: 1px solid var(--teal);
+		outline: 2px solid var(--cream);
 		outline-offset: 1px;
 	}
 
@@ -157,6 +168,7 @@
 	}
 
 	button {
+		min-height: 44px;
 		padding: 0.35rem 0.7rem;
 		border: 1px solid var(--cream);
 		background: transparent;
@@ -166,14 +178,14 @@
 		text-transform: uppercase;
 	}
 
-	button:hover,
-	button:focus-visible {
-		outline: none;
+	button:hover {
 		text-shadow:
 			1px 0 var(--coral),
 			-1px 0 var(--teal);
 	}
 
+	button:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
+	.field-error { color: #ffb3a5; font-size: .75rem; letter-spacing: 0; text-transform: none; }
 	.status {
 		min-height: 1.2em;
 		opacity: 0.6;

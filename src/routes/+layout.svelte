@@ -51,8 +51,8 @@
 <Stars />
 
 <div class="site">
-	<header>
-		<p class="name">Luqmaan Sayed</p>
+	<header class:case-header={page.url.pathname.startsWith("/work/")}>
+		{#if page.url.pathname === "/"}<h1 class="name">Luqmaan Sayed</h1>{:else}<p class="name">Luqmaan Sayed</p>{/if}
 		<p class="role">Creative web developer</p>
 		<nav aria-label="Primary">
 			<a href="/">Home</a>
@@ -187,6 +187,9 @@
 		padding: 2rem 1.25rem 5rem;
 	}
 
+	.case-header .name, .case-header .role { display: none; }
+	.case-header { margin-bottom: 1rem; }
+	@media (max-width: 520px) { .site { padding-top: .75rem; } header { margin-bottom: .75rem; } .role { margin-bottom: .3rem; } }
 	header {
 		margin-bottom: 2.5rem;
 	}
@@ -213,6 +216,7 @@
 		gap: 1rem;
 	}
 
+	nav a { display: inline-flex; align-items: center; min-height: 44px; }
 	nav a,
 	main :global(a) {
 		color: inherit;
@@ -225,7 +229,7 @@
 			-1px 0 var(--teal);
 	}
 
-	main :global(h1) {
+	main :global(h1), main :global(h2) {
 		margin: 0 0 0.75rem;
 		font-size: 0.8rem;
 		font-weight: 700;

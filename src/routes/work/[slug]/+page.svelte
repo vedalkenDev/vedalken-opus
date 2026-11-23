@@ -66,6 +66,7 @@
 	:global(article p), :global(article li) { line-height: 1.7; }
 	:global(article a) { text-underline-offset: 0.2em; }
 
+	.back a, .links a { display: inline-flex; align-items: center; min-height: 44px; }
 	.back {
 		margin: 0 0 1.5rem;
 	}

@@ -123,7 +123,7 @@
 		height: auto;
 		margin: 0;
 		pointer-events: none;
-		transform: translate(-50%, -120%);
+		transform: translate(-50%, 18px);
 		mix-blend-mode: screen;
 		border: 1px solid var(--cream);
 		opacity: 0;

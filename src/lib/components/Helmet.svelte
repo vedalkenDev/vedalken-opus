@@ -894,6 +894,8 @@
 		z-index: 7;
 	}
 
+	@media (max-width: 900px) { .stage.docked { display: none; } }
+
 	@media (prefers-reduced-motion: reduce) {
 		.stage { transition: none; }
 	}

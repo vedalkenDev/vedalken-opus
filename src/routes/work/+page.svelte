@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { projects, additionalWork } from '#lib/projects.ts';
+	import { projects } from '#lib/projects.ts';
 </script>
 
 <h1>Work</h1>
@@ -13,18 +13,7 @@
 	{/each}
 </ul>
 <h2>More work</h2>
-<ul>
-	{#each additionalWork as item}
-		<li>
-			{#if item.slug}
-				<a href="/work/more/{item.slug}">{item.title}</a>
-			{:else}
-				<a href="/#work">{item.title}</a>
-			{/if}
-			<span class="summary">{item.summary}</span>
-		</li>
-	{/each}
-</ul>
+<ul><li><a href="/work/earlier">Earlier web work</a><span class="summary">Bargain Xpress, Bargain Wholesalers and MIP Brands.</span></li><li><a href="/#work">AI agents &amp; studio tools</a></li></ul>
 
 <style>
 	h2 { margin-top: 2.5rem; font-size: 1rem; }

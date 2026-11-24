@@ -23,7 +23,7 @@
 					<li>Built three AI agents that together save the team 25 hours a week, including an agent that helps keep supermarket product catalogues current.</li>
 					<li>Built a content repurposing system that saves two FMCG designers 20 hours a week between them.</li>
 					<li>Researched, designed and built <a href="/work/toolmac">Toolmac</a> from end to end, reducing reported homepage load time from 12 seconds to 0.5 seconds through caching.</li>
-					<li>Designed and built <a href="/work/more/bargain-xpress">Bargain Xpress</a>, <a href="/work/more/bargain-wholesalers">Bargain Wholesalers</a> and <a href="/work/more/mip-brands">MIP Brands</a> with the senior director.</li>
+					<li>Designed and built <a href="/work/more/bargain-xpress">Bargain Xpress</a> and <a href="/work/more/bargain-wholesalers">Bargain Wholesalers</a> with the senior director.</li>
 				</ul>
 				<a class="detail-link" href="/#work">Explore my work <span aria-hidden="true">→</span></a>
 			</div>

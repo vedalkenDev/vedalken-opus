@@ -55,6 +55,20 @@
 			]
 		},
 		{
+			name: 'AI-directed website build',
+			path: 'website_build',
+			type: 'AI WORKFLOW',
+			intro: 'From Figma to a live WordPress catalogue for MIP Brands.',
+			detail: 'I directed Claude Code through production, reviewed the work and made the launch decisions.',
+			role: 'Direction, review and launch',
+			stages: [
+				{ name: 'design', text: 'The supplied Figma design and client assets set the direction.' },
+				{ name: 'build', text: 'The agent generated native Divi layouts and the product catalogue.' },
+				{ name: 'review', text: 'I reviewed the site and directed fixes across screen sizes.' },
+				{ name: 'launch', text: 'I directed launch checks, backups and post-launch debugging.' }
+			]
+		},
+		{
 			name: 'Team enablement',
 			path: 'team_enablement',
 			type: 'KNOWLEDGE',
@@ -123,6 +137,8 @@
 					<p>{current.detail}</p>
 					{#if current.path === 'agent_training'}
 						<a class="training-link" href="/work/ai-training">Explore the training programme →</a>
+					{:else if current.path === 'website_build'}
+						<a class="training-link" href="/work/more/mip-brands">See the Figma-to-site workflow →</a>
 					{/if}
 					<p class="contribution"><span>MY ROLE</span>{current.role}</p>
 				{:else}

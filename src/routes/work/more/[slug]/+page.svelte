@@ -7,16 +7,22 @@
 <p class="back"><a href="/work">← Work</a></p>
 <h1>{project.title}</h1>
 <p class="intro">{project.summary}</p>
-<dl>
-	<div><dt>My contribution</dt><dd>Web design and development</dd></div>
-	<div><dt>Collaboration</dt><dd>Cerebro Creative’s senior director</dd></div>
-	<div><dt>Platform</dt><dd>WordPress and Divi</dd></div>
-</dl>
+{#if project.slug === 'mrbuild-landing'}
+	<dl><div><dt>Project</dt><dd>Landing page design concept</dd></div></dl>
+{:else if project.slug === 'ffs-refiners'}
+	<dl><div><dt>Project</dt><dd>WordPress site build</dd></div></dl>
+{:else}
+	<dl>
+		<div><dt>My contribution</dt><dd>Web design and development</dd></div>
+		<div><dt>Collaboration</dt><dd>Cerebro Creative’s senior director</dd></div>
+		<div><dt>Platform</dt><dd>WordPress and Divi</dd></div>
+	</dl>
+{/if}
 <figure>
 	<img src={project.image} alt="{project.title} website homepage" width="1280" height="800" />
-	<figcaption>The live homepage, captured November 2026.</figcaption>
+	<figcaption>{project.slug === 'mrbuild-landing' ? 'Landing page concept, captured November 2026.' : 'The live homepage, captured November 2026.'}</figcaption>
 </figure>
-<p><a href={project.url}>Visit the live site ↗</a></p>
+<p><a href={project.url}>{project.slug === 'mrbuild-landing' ? 'View the concept' : 'Visit the live site'} ↗</a></p>
 <p><a href="/work">← More projects</a></p>
 
 <style>

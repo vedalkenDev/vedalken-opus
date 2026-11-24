@@ -95,16 +95,38 @@ export const additionalWork = [
 		image: '/work/additional/bargain-wholesalers.webp',
 		summary: 'Designed and built a wholesale site in WordPress and Divi with Cerebro Creative’s senior director.'
 	},
+
 	{
 		slug: 'mip-brands',
 		title: 'MIP Brands',
 		image: '/work/additional/mip-brands.webp',
-		summary: 'Designed and built the site in WordPress and Divi with Cerebro Creative’s senior director.',
+		summary: 'An AI-directed WordPress product catalogue, built from a Figma design.',
 		url: 'https://mipbrands.co.za/'
 	},
 	{
 		title: 'AI agents and studio tools',
 		graphic: 'agents',
 		summary: 'Built internal AI agents and a content repurposing system for Cerebro Creative, including catalogue maintenance for supermarket websites.'
+	},
+	{
+		slug: 'mrbuild-landing',
+		title: 'Mr Build Landing',
+		url: 'https://vedalkendev.github.io/mrbuild-landing/index.html',
+		image: '/work/additional/mrbuild-landing.webp',
+		summary: 'Landing page design concept for a construction and hardware supplier.'
+	},
+	{
+		slug: 'ffs-refiners',
+		title: 'FFS Refiners',
+		url: 'https://ffs-refiners.com/',
+		image: '/work/additional/ffs-refiners.webp',
+		summary: 'WordPress site built for a refining and precious metals business.'
+	},
+	{
+		slug: 'bargain-group',
+		title: 'Bargain Group',
+		url: 'https://bargaingroup.co.za/',
+		image: '/work/additional/bargain-group.webp',
+		summary: 'Designed and built a retail site in WordPress and Divi with Cerebro Creative’s senior director.'
 	}
 ];

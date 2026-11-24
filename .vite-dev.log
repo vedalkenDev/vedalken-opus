@@ -1,0 +1,1012 @@
+
+> vedalken.dev@0.0.1 dev
+> vite dev
+
+1:32:53 PM [vite] (ssr) connected.
+
+  VITE v8.3.6  ready in 3097 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+1:33:50 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:19:3 `<a>` element should have an href attribute
+https://svelte.dev/e/a11y_missing_attribute
+1:33:50 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:24:3 `<a>` element should have an href attribute
+https://svelte.dev/e/a11y_missing_attribute
+1:33:50 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:29:3 `<a>` element should have an href attribute
+https://svelte.dev/e/a11y_missing_attribute
+1:33:50 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:118:1 Unused CSS selector ".link-list h3"
+https://svelte.dev/e/css_unused_selector
+ReferenceError: additionalWork is not defined
+    at eval (src/routes/work/for-recruiters/+page.svelte:42:9)
+    at eval (node_modules/svelte/src/internal/server/renderer.js:413:11)
+    at Renderer.child (node_modules/svelte/src/internal/server/renderer.js:302:18)
+    at Renderer.component (node_modules/svelte/src/internal/server/renderer.js:411:8)
+    at _page (src/routes/work/for-recruiters/+page.svelte:4:2)
+    at eval (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:34:37)
+    at Renderer.boundary (node_modules/svelte/src/internal/server/renderer.js:355:19)
+    at node (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:27:16)
+    at eval (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:34:14)
+    at eval (src/routes/+layout.svelte:67:12)
+500 GET /work/for-recruiters
+ReferenceError: additionalWork is not defined
+    at eval (src/routes/work/for-recruiters/+page.svelte:42:9)
+    at eval (node_modules/svelte/src/internal/server/renderer.js:413:11)
+    at Renderer.child (node_modules/svelte/src/internal/server/renderer.js:302:18)
+    at Renderer.component (node_modules/svelte/src/internal/server/renderer.js:411:8)
+    at _page (src/routes/work/for-recruiters/+page.svelte:4:2)
+    at eval (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:34:37)
+    at Renderer.boundary (node_modules/svelte/src/internal/server/renderer.js:355:19)
+    at node (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:27:16)
+    at eval (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:34:14)
+    at eval (src/routes/+layout.svelte:67:12)
+500 GET /work/for-recruiters
+ReferenceError: additionalWork is not defined
+    at eval (src/routes/work/for-recruiters/+page.svelte:42:9)
+    at eval (node_modules/svelte/src/internal/server/renderer.js:413:11)
+    at Renderer.child (node_modules/svelte/src/internal/server/renderer.js:302:18)
+    at Renderer.component (node_modules/svelte/src/internal/server/renderer.js:411:8)
+    at _page (src/routes/work/for-recruiters/+page.svelte:4:2)
+    at eval (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:34:37)
+    at Renderer.boundary (node_modules/svelte/src/internal/server/renderer.js:355:19)
+    at node (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:27:16)
+    at eval (node_modules/@sveltejs/kit/src/runtime/components/root.svelte:34:14)
+    at eval (src/routes/+layout.svelte:67:12)
+500 GET /work/for-recruiters
+1:34:19 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:34:19 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+1:34:36 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:34:36 PM [vite] (ssr) program reload
+1:36:42 PM [vite] (ssr) page reload src/lib/projects.ts
+1:36:42 PM [vite] (ssr) program reload
+1:36:42 PM [vite] (ssr) page reload src/lib/projects.ts
+1:36:42 PM [vite] (ssr) program reload
+1:36:52 PM [vite] (client) page reload reviews/social-preview-recruiters-source.html
+1:37:05 PM [vite] (ssr) page reload src/lib/metadata.ts
+1:37:19 PM [vite] (client) page reload build/shelf.html
+1:37:19 PM [vite] (client) page reload build/index.html
+1:37:19 PM [vite] (client) page reload build/about.html
+1:37:19 PM [vite] (client) page reload build/work.html
+1:37:19 PM [vite] (client) page reload build/work/ai-training.html
+1:37:19 PM [vite] (client) page reload build/work/earlier.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:37:19 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:37:19 PM [vite] (client) page reload build/work/toolmac.html
+1:37:19 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:37:19 PM [vite] (client) page reload build/work/plancheck.html
+1:37:19 PM [vite] (client) page reload build/about.html
+1:37:19 PM [vite] (client) page reload build/index.html
+1:37:19 PM [vite] (client) page reload build/shelf.html
+1:37:19 PM [vite] (client) page reload build/work.html
+1:37:19 PM [vite] (client) page reload build/work/ai-training.html
+1:37:19 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:37:19 PM [vite] (client) page reload build/work/earlier.html
+1:37:19 PM [vite] (client) page reload build/work/for-recruiters.html
+1:37:19 PM [vite] (client) page reload build/work/plancheck.html
+1:37:19 PM [vite] (client) page reload build/work/toolmac.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:37:19 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:37:19 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:37:19 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:37:19 PM [vite] (client) page reload build/about.html
+1:37:19 PM [vite] (client) page reload build/index.html
+1:37:19 PM [vite] (client) page reload build/shelf.html
+1:37:19 PM [vite] (client) page reload build/work/ai-training.html
+1:37:19 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:37:19 PM [vite] (client) page reload build/work/earlier.html
+1:37:19 PM [vite] (client) page reload build/work/for-recruiters.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:37:19 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:37:19 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:37:19 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:37:19 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:37:19 PM [vite] (client) page reload build/work/plancheck.html
+1:37:19 PM [vite] (client) page reload build/work/toolmac.html
+1:37:19 PM [vite] (client) page reload build/work.html
+200 GET /work/for-recruiters
+200 GET /work/earlier
+200 GET /work/more/mrbuild-landing
+200 GET /work/more/ffs-refiners
+200 GET /work/more/bargain-group
+200 GET /shelf
+200 GET /
+200 GET /work/for-recruiters
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+1:39:29 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:39:29 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:39:29 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+304 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+1:39:58 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:39:58 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:39:58 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+304 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:121:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:122:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:123:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:124:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:125:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:126:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:40:37 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:40:37 PM [vite] (ssr) program reload
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:121:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:122:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:123:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:124:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:125:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:126:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:121:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:122:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:123:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:124:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:125:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:126:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:40:37 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+304 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:128:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:129:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:130:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:131:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:132:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:133:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:41:12 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:41:12 PM [vite] (ssr) program reload
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:128:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:129:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:130:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:131:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:132:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:133:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:128:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:129:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:130:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:131:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:132:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:133:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:41:12 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+1:41:34 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:128:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:41:34 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:129:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:34 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:130:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:41:34 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:131:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:41:34 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:132:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:41:34 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:133:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:41:34 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:34 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:41:34 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:41:34 PM [vite] (ssr) program reload
+1:41:35 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:128:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:41:35 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:129:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:41:35 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:130:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:41:35 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:131:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:41:35 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:132:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:41:35 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:133:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:41:35 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:95:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:134:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:135:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:136:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:137:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:138:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:152:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:42:04 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:42:04 PM [vite] (ssr) program reload
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:95:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:134:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:135:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:136:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:137:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:138:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:152:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:95:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:134:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:135:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:136:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:137:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:138:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:42:04 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:152:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:89:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:138:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:140:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:141:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:142:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:143:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:145:1 Unused CSS selector ".work-card"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:1 Unused CSS selector ".work-card h3"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:147:1 Unused CSS selector ".work-card p"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:148:1 Unused CSS selector ".work-card dl"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:149:1 Unused CSS selector ".work-card dt"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:150:1 Unused CSS selector ".work-card dd"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:151:1 Unused CSS selector ".work-card a"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:153:1 Unused CSS selector ".project-list"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:156:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:157:2 Unused CSS selector ".work-card"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:42:39 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:42:39 PM [vite] (ssr) program reload
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:89:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:138:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:140:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:141:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:142:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:143:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:145:1 Unused CSS selector ".work-card"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:1 Unused CSS selector ".work-card h3"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:147:1 Unused CSS selector ".work-card p"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:148:1 Unused CSS selector ".work-card dl"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:149:1 Unused CSS selector ".work-card dt"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:150:1 Unused CSS selector ".work-card dd"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:151:1 Unused CSS selector ".work-card a"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:153:1 Unused CSS selector ".project-list"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:156:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:157:2 Unused CSS selector ".work-card"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:89:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:138:1 Unused CSS selector ".link-list"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:139:1 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:140:1 Unused CSS selector ".chip"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:141:1 Unused CSS selector ".link-list p"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:142:1 Unused CSS selector ".link-list a"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:143:1 Unused CSS selector ".note"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:145:1 Unused CSS selector ".work-card"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:146:1 Unused CSS selector ".work-card h3"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:147:1 Unused CSS selector ".work-card p"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:148:1 Unused CSS selector ".work-card dl"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:149:1 Unused CSS selector ".work-card dt"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:150:1 Unused CSS selector ".work-card dd"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:151:1 Unused CSS selector ".work-card a"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:153:1 Unused CSS selector ".project-list"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:156:2 Unused CSS selector ".link-list li"
+https://svelte.dev/e/css_unused_selector
+1:42:39 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:157:2 Unused CSS selector ".work-card"
+https://svelte.dev/e/css_unused_selector
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+1:43:06 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:89:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:43:06 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:43:06 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:43:06 PM [vite] (ssr) program reload
+1:43:07 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:89:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+1:43:07 PM [vite-plugin-svelte] src/routes/work/for-recruiters/+page.svelte:89:1 Unused CSS selector ".lede"
+https://svelte.dev/e/css_unused_selector
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+1:43:24 PM [vite] (client) page reload build/shelf.html
+1:43:24 PM [vite] (client) page reload build/index.html
+1:43:24 PM [vite] (client) page reload build/about.html
+1:43:24 PM [vite] (client) page reload build/work.html
+1:43:24 PM [vite] (client) page reload build/work/ai-training.html
+1:43:24 PM [vite] (client) page reload build/work/for-recruiters.html
+1:43:24 PM [vite] (client) page reload build/work/earlier.html
+1:43:24 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:43:24 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:43:24 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:43:24 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:43:24 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:43:24 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:43:24 PM [vite] (client) page reload build/work/toolmac.html
+1:43:24 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:43:24 PM [vite] (client) page reload build/work/plancheck.html
+1:43:24 PM [vite] (client) page reload build/about.html
+1:43:24 PM [vite] (client) page reload build/index.html
+1:43:24 PM [vite] (client) page reload build/shelf.html
+1:43:24 PM [vite] (client) page reload build/work/ai-training.html
+1:43:24 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:43:24 PM [vite] (client) page reload build/work/earlier.html
+1:43:24 PM [vite] (client) page reload build/work/for-recruiters.html
+1:43:24 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:43:24 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:43:24 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:43:24 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:43:24 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:43:24 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:43:24 PM [vite] (client) page reload build/work/plancheck.html
+1:43:24 PM [vite] (client) page reload build/work/toolmac.html
+1:43:24 PM [vite] (client) page reload build/work.html
+1:43:40 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:43:40 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:43:40 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/toolmac
+200 GET /work/ai-training
+200 GET /work/more/mrbuild-landing
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/toolmac
+200 GET /work/ai-training
+200 GET /work/more/mrbuild-landing
+1:44:06 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+1:44:06 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:44:06 PM [vite] (ssr) program reload
+1:44:45 PM [vite] (client) page reload build/shelf.html
+1:44:45 PM [vite] (client) page reload build/index.html
+1:44:45 PM [vite] (client) page reload build/about.html
+1:44:45 PM [vite] (client) page reload build/work.html
+1:44:45 PM [vite] (client) page reload build/work/ai-training.html
+1:44:45 PM [vite] (client) page reload build/work/for-recruiters.html
+1:44:45 PM [vite] (client) page reload build/work/earlier.html
+1:44:45 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:44:45 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:44:45 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:44:45 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:44:45 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:44:45 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:44:45 PM [vite] (client) page reload build/work/toolmac.html
+1:44:45 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:44:45 PM [vite] (client) page reload build/work/plancheck.html
+1:44:45 PM [vite] (client) page reload build/about.html
+1:44:45 PM [vite] (client) page reload build/index.html
+1:44:45 PM [vite] (client) page reload build/shelf.html
+1:44:45 PM [vite] (client) page reload build/about.html
+1:44:45 PM [vite] (client) page reload build/index.html
+1:44:45 PM [vite] (client) page reload build/shelf.html
+1:44:45 PM [vite] (client) page reload build/work/ai-training.html
+1:44:45 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:44:45 PM [vite] (client) page reload build/work/earlier.html
+1:44:45 PM [vite] (client) page reload build/work/for-recruiters.html
+1:44:45 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:44:45 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:44:45 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:44:45 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:44:45 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:44:45 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:44:45 PM [vite] (client) page reload build/work/plancheck.html
+1:44:45 PM [vite] (client) page reload build/work/toolmac.html
+1:44:45 PM [vite] (client) page reload build/work.html
+1:49:06 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte
+1:49:06 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:49:06 PM [vite] (ssr) program reload
+1:49:24 PM [vite] (ssr) page reload src/routes/work/ai-training/+page.svelte
+1:52:15 PM [vite] (client) hmr update /src/routes/+layout.svelte, /src/routes/work/for-recruiters/+page.svelte
+1:52:15 PM [vite] (ssr) page reload src/lib/projects.ts
+1:52:15 PM [vite] (ssr) program reload
+1:52:15 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:52:15 PM [vite] (client) hmr update /src/routes/+layout.svelte
+1:52:15 PM [vite] (ssr) page reload src/lib/metadata.ts
+1:52:15 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte
+1:52:15 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:52:15 PM [vite] (ssr) program reload
+1:54:46 PM [vite] (client) hmr update /src/routes/+layout.svelte, /src/routes/work/for-recruiters/+page.svelte
+1:54:46 PM [vite] (ssr) page reload src/lib/projects.ts
+1:54:46 PM [vite] (ssr) program reload
+1:54:46 PM [vite] (ssr) page reload src/routes/+page.svelte
+1:54:46 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte
+1:54:46 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:54:46 PM [vite] (ssr) program reload
+1:55:49 PM [vite] (client) page reload .svelte-kit/generated/dev/client/app.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+1:56:00 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte
+1:56:00 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+1:56:00 PM [vite] (ssr) program reload
+1:56:15 PM [vite] (ssr) page reload src/lib/components/AgentArchive.svelte
+1:56:27 PM [vite] (client) hmr update /src/routes/+layout.svelte
+1:56:27 PM [vite] (ssr) page reload src/lib/metadata.ts
+1:56:33 PM [vite] (client) page reload build/shelf.html
+1:56:33 PM [vite] (client) page reload build/index.html
+1:56:33 PM [vite] (client) page reload build/about.html
+1:56:33 PM [vite] (client) page reload build/work.html
+1:56:33 PM [vite] (client) page reload build/work/ai-training.html
+1:56:33 PM [vite] (client) page reload build/work/for-recruiters.html
+1:56:33 PM [vite] (client) page reload build/work/earlier.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:56:33 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:56:33 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:56:33 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:56:33 PM [vite] (client) page reload build/work/toolmac.html
+1:56:33 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:56:33 PM [vite] (client) page reload build/work/plancheck.html
+1:56:33 PM [vite] (client) page reload build/work/ai-training.html
+1:56:33 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:56:33 PM [vite] (client) page reload build/work/earlier.html
+1:56:33 PM [vite] (client) page reload build/work/for-recruiters.html
+1:56:33 PM [vite] (client) page reload build/work/plancheck.html
+1:56:33 PM [vite] (client) page reload build/work/toolmac.html
+1:56:33 PM [vite] (client) page reload build/about.html
+1:56:33 PM [vite] (client) page reload build/index.html
+1:56:33 PM [vite] (client) page reload build/shelf.html
+1:56:33 PM [vite] (client) page reload build/work.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:56:33 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:56:33 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:56:33 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:56:33 PM [vite] (client) page reload build/about.html
+1:56:33 PM [vite] (client) page reload build/index.html
+1:56:33 PM [vite] (client) page reload build/shelf.html
+1:56:33 PM [vite] (client) page reload build/work/ai-training.html
+1:56:33 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:56:33 PM [vite] (client) page reload build/work/earlier.html
+1:56:33 PM [vite] (client) page reload build/work/for-recruiters.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:56:33 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:56:33 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:56:33 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:56:33 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:56:33 PM [vite] (client) page reload build/work/plancheck.html
+1:56:33 PM [vite] (client) page reload build/work/toolmac.html
+1:56:33 PM [vite] (client) page reload build/work.html
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+304 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+1:57:24 PM [vite] (client) page reload build/shelf.html
+1:57:24 PM [vite] (client) page reload build/index.html
+1:57:24 PM [vite] (client) page reload build/about.html
+1:57:24 PM [vite] (client) page reload build/work.html
+1:57:24 PM [vite] (client) page reload build/work/ai-training.html
+1:57:24 PM [vite] (client) page reload build/work/for-recruiters.html
+1:57:24 PM [vite] (client) page reload build/work/earlier.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:57:24 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:57:24 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:57:24 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:57:24 PM [vite] (client) page reload build/work/toolmac.html
+1:57:24 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:57:24 PM [vite] (client) page reload build/work/plancheck.html
+1:57:24 PM [vite] (client) page reload build/work/ai-training.html
+1:57:24 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:57:24 PM [vite] (client) page reload build/work/earlier.html
+1:57:24 PM [vite] (client) page reload build/work/for-recruiters.html
+1:57:24 PM [vite] (client) page reload build/work/plancheck.html
+1:57:24 PM [vite] (client) page reload build/work/toolmac.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:57:24 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:57:24 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:57:24 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+1:57:24 PM [vite] (client) page reload build/about.html
+1:57:24 PM [vite] (client) page reload build/index.html
+1:57:24 PM [vite] (client) page reload build/shelf.html
+1:57:24 PM [vite] (client) page reload build/work/ai-training.html
+1:57:24 PM [vite] (client) page reload build/work/ascii-image-generator.html
+1:57:24 PM [vite] (client) page reload build/work/earlier.html
+1:57:24 PM [vite] (client) page reload build/work/for-recruiters.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-group.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+1:57:24 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+1:57:24 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+1:57:24 PM [vite] (client) page reload build/work/more/mip-brands.html
+1:57:24 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+1:57:24 PM [vite] (client) page reload build/work/plancheck.html
+1:57:24 PM [vite] (client) page reload build/work/toolmac.html
+1:57:24 PM [vite] (client) page reload build/work.html
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+200 GET /work/ai-training
+200 GET /work/for-recruiters
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+404 GET /_vercel/insights/script.js
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+304 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+304 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+304 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+2:00:34 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte, /src/routes/work/for-recruiters/+page.svelte?svelte&type=style&lang.css
+2:00:34 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+2:00:34 PM [vite] (ssr) program reload
+2:00:34 PM [vite] (client) hmr update /src/routes/work/ai-training/+page.svelte
+2:00:34 PM [vite] (ssr) page reload src/routes/work/ai-training/+page.svelte
+2:00:34 PM [vite] (client) hmr update /src/routes/work/more/mip-brands/+page.svelte, /src/routes/work/more/mip-brands/+page.svelte?svelte&type=style&lang.css
+2:00:34 PM [vite] (ssr) page reload src/routes/work/more/mip-brands/+page.svelte
+2:00:50 PM [vite] (ssr) page reload src/routes/work/more/[slug]/+page.svelte
+2:02:57 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte
+2:02:57 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+2:02:57 PM [vite] (ssr) program reload
+2:02:57 PM [vite] (client) hmr update /src/routes/work/more/mip-brands/+page.svelte, /src/routes/work/more/mip-brands/+page.svelte?svelte&type=style&lang.css
+2:02:57 PM [vite] (ssr) page reload src/routes/work/more/mip-brands/+page.svelte
+2:03:05 PM [vite] (client) hmr update /src/routes/work/ai-training/+page.svelte
+2:03:05 PM [vite] (ssr) page reload src/routes/work/ai-training/+page.svelte
+200 GET /work/for-recruiters
+2:03:14 PM [vite] (client) page reload build/shelf.html
+2:03:14 PM [vite] (client) page reload build/index.html
+2:03:14 PM [vite] (client) page reload build/about.html
+2:03:14 PM [vite] (client) page reload build/work.html
+2:03:14 PM [vite] (client) page reload build/work/ai-training.html
+2:03:14 PM [vite] (client) page reload build/work/for-recruiters.html
+2:03:14 PM [vite] (client) page reload build/work/earlier.html
+2:03:14 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:03:14 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:03:14 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:03:14 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:03:14 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:03:14 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:03:14 PM [vite] (client) page reload build/work/toolmac.html
+2:03:14 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:03:14 PM [vite] (client) page reload build/work/plancheck.html
+2:03:14 PM [vite] (client) page reload build/about.html
+2:03:14 PM [vite] (client) page reload build/index.html
+2:03:14 PM [vite] (client) page reload build/shelf.html
+2:03:14 PM [vite] (client) page reload build/work/ai-training.html
+2:03:14 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:03:14 PM [vite] (client) page reload build/work/earlier.html
+2:03:14 PM [vite] (client) page reload build/work/for-recruiters.html
+2:03:14 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:03:14 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:03:14 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:03:14 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:03:14 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:03:14 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:03:14 PM [vite] (client) page reload build/work/plancheck.html
+2:03:14 PM [vite] (client) page reload build/work/toolmac.html
+2:03:14 PM [vite] (client) page reload build/work.html
+2:03:14 PM [vite] (client) page reload build/work.html
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/ai-training
+304 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+404 GET /work/more/mr-build
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/mrbuild-landing
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/ffs-refiners
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/mrbuild-landing
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/ffs-refiners
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/more/mip-brands
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/mrbuild-landing
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/more/ffs-refiners
+404 GET /_vercel/insights/script.js
+304 GET /_app/env.js
+200 GET /work/ai-training
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+2:05:56 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte
+2:05:56 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+2:05:56 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+2:10:32 PM [vite] (client) hmr update /src/routes/work/for-recruiters/+page.svelte
+2:10:32 PM [vite] (ssr) page reload src/routes/work/for-recruiters/+page.svelte
+2:10:32 PM [vite] (ssr) program reload
+2:10:41 PM [vite] (client) page reload build/shelf.html
+2:10:41 PM [vite] (client) page reload build/index.html
+2:10:41 PM [vite] (client) page reload build/about.html
+2:10:41 PM [vite] (client) page reload build/work.html
+2:10:41 PM [vite] (client) page reload build/work/ai-training.html
+2:10:41 PM [vite] (client) page reload build/work/for-recruiters.html
+2:10:41 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:10:41 PM [vite] (client) page reload build/work/earlier.html
+2:10:41 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:10:41 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:10:41 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:10:41 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:10:41 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:10:41 PM [vite] (client) page reload build/work/toolmac.html
+2:10:41 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:10:41 PM [vite] (client) page reload build/work/plancheck.html
+2:10:41 PM [vite] (client) page reload build/about.html
+2:10:41 PM [vite] (client) page reload build/index.html
+2:10:41 PM [vite] (client) page reload build/shelf.html
+2:10:41 PM [vite] (client) page reload build/work/ai-training.html
+2:10:41 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:10:41 PM [vite] (client) page reload build/work/earlier.html
+2:10:41 PM [vite] (client) page reload build/work/for-recruiters.html
+2:10:41 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:10:41 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:10:41 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:10:41 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:10:41 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:10:41 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:10:41 PM [vite] (client) page reload build/work/plancheck.html
+2:10:41 PM [vite] (client) page reload build/work/toolmac.html
+2:10:41 PM [vite] (client) page reload build/work.html
+2:10:47 PM [vite] (client) hmr update /src/lib/components/SystemGlyph.svelte?svelte&type=style&lang.css
+2:10:47 PM [vite] (ssr) page reload src/lib/components/SystemGlyph.svelte
+2:10:47 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+2:12:56 PM [vite] (client) hmr update /src/lib/components/SystemGlyph.svelte, /src/lib/components/SystemGlyph.svelte?svelte&type=style&lang.css
+2:12:56 PM [vite] (ssr) page reload src/lib/components/SystemGlyph.svelte
+2:12:56 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+2:13:06 PM [vite] (client) page reload build/shelf.html
+2:13:06 PM [vite] (client) page reload build/index.html
+2:13:06 PM [vite] (client) page reload build/about.html
+2:13:06 PM [vite] (client) page reload build/work.html
+2:13:06 PM [vite] (client) page reload build/work/ai-training.html
+2:13:06 PM [vite] (client) page reload build/work/earlier.html
+2:13:06 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:13:06 PM [vite] (client) page reload build/work/for-recruiters.html
+2:13:06 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:13:06 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:13:06 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:13:06 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:13:06 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:13:06 PM [vite] (client) page reload build/work/toolmac.html
+2:13:06 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:13:06 PM [vite] (client) page reload build/work/plancheck.html
+2:13:06 PM [vite] (client) page reload build/work/ai-training.html
+2:13:06 PM [vite] (client) page reload build/about.html
+2:13:06 PM [vite] (client) page reload build/index.html
+2:13:06 PM [vite] (client) page reload build/shelf.html
+2:13:06 PM [vite] (client) page reload build/work/ai-training.html
+2:13:06 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:13:06 PM [vite] (client) page reload build/work/earlier.html
+2:13:06 PM [vite] (client) page reload build/work/for-recruiters.html
+2:13:06 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:13:06 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:13:06 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:13:06 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:13:06 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:13:06 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:13:06 PM [vite] (client) page reload build/work/plancheck.html
+2:13:06 PM [vite] (client) page reload build/work/toolmac.html
+2:13:06 PM [vite] (client) page reload build/work.html
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+2:14:48 PM [vite] (client) hmr update /src/lib/components/SystemGlyph.svelte, /src/lib/components/SystemGlyph.svelte?svelte&type=style&lang.css
+2:14:48 PM [vite] (ssr) page reload src/lib/components/SystemGlyph.svelte
+2:14:48 PM [vite] (ssr) program reload
+200 GET /work/for-recruiters
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /work/for-recruiters
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /
+404 GET /_vercel/insights/script.js
+200 GET /_app/env.js
+200 GET /_app/env.js
+404 GET /_vercel/insights/script.js
+2:16:30 PM [vite] (client) page reload build/shelf.html
+2:16:30 PM [vite] (client) page reload build/index.html
+2:16:30 PM [vite] (client) page reload build/about.html
+2:16:30 PM [vite] (client) page reload build/work.html
+2:16:30 PM [vite] (client) page reload build/work/ai-training.html
+2:16:30 PM [vite] (client) page reload build/work/for-recruiters.html
+2:16:30 PM [vite] (client) page reload build/work/earlier.html
+2:16:30 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:16:30 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:16:30 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:16:30 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:16:30 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:16:30 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:16:30 PM [vite] (client) page reload build/work/toolmac.html
+2:16:30 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:16:30 PM [vite] (client) page reload build/work/plancheck.html
+2:16:30 PM [vite] (client) page reload build/about.html
+2:16:30 PM [vite] (client) page reload build/index.html
+2:16:30 PM [vite] (client) page reload build/shelf.html
+2:16:30 PM [vite] (client) page reload build/work/ai-training.html
+2:16:30 PM [vite] (client) page reload build/work/ascii-image-generator.html
+2:16:30 PM [vite] (client) page reload build/work/earlier.html
+2:16:30 PM [vite] (client) page reload build/work/for-recruiters.html
+2:16:30 PM [vite] (client) page reload build/work/more/bargain-group.html
+2:16:30 PM [vite] (client) page reload build/work/more/bargain-wholesalers.html
+2:16:30 PM [vite] (client) page reload build/work/more/bargain-xpress.html
+2:16:30 PM [vite] (client) page reload build/work/more/ffs-refiners.html
+2:16:30 PM [vite] (client) page reload build/work/more/mip-brands.html
+2:16:30 PM [vite] (client) page reload build/work/more/mrbuild-landing.html
+2:16:30 PM [vite] (client) page reload build/work/plancheck.html
+2:16:30 PM [vite] (client) page reload build/work/toolmac.html
+2:16:30 PM [vite] (client) page reload build/work.html
+7:57:37 PM [vite] (client) hmr update /src/routes/+layout.svelte
+7:57:37 PM [vite] (ssr) page reload src/routes/+layout.svelte
+7:57:37 PM [vite] (ssr) program reload
+7:57:38 PM [vite] (ssr) page reload src/routes/+layout.svelte
+7:57:38 PM [vite] (ssr) program reload

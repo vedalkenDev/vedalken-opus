@@ -1,0 +1,87 @@
+- banner:
+  - paragraph: Luqmaan Sayed
+  - paragraph: Creative web developer
+  - navigation "Primary":
+    - link "Home":
+      - /url: /
+    - link "Work":
+      - /url: /work
+    - link "Shelf":
+      - /url: /shelf
+    - link "About":
+      - /url: /about
+  - button "Index · Ctrl+K"
+- main:
+  - heading "My library" [level=1]
+  - paragraph: Books I own, collected here on my shelf.
+  - paragraph: Hover to reveal ASCII. Tap or press a cover to see it in full.
+  - text: 11 of 11 books shown
+  - paragraph: Browse the collection
+  - group "Filter my library":
+    - text: category
+    - combobox "category":
+      - option "All categories" [selected]
+      - option "Adventure Fiction"
+      - option "Biography"
+      - option "Historical Fiction"
+      - option "Personal Development"
+      - option "Productivity"
+      - option "Science Fiction"
+    - text: author
+    - combobox "author":
+      - option "All authors" [selected]
+      - option "Brian Jay Jones"
+      - option "Cal Newport"
+      - option "Elif Shafak"
+      - option "Frank Herbert"
+      - option "Jules Verne"
+      - option "Robert Greene"
+    - text: series
+    - combobox "series":
+      - option "All series" [selected]
+      - option "Dune"
+  - list:
+    - listitem:
+      - button "Toggle ASCII cover for Dune":
+        - img "Dune by Frank Herbert, cover"
+      - text: No. 001 Dune Frank Herbert Science Fiction· Dune 1
+    - listitem:
+      - button "Toggle ASCII cover for Dune Messiah":
+        - img "Dune Messiah by Frank Herbert, cover"
+      - text: No. 002 Dune Messiah Frank Herbert Science Fiction· Dune 2
+    - listitem:
+      - button "Toggle ASCII cover for Children of Dune":
+        - img "Children of Dune by Frank Herbert, cover"
+      - text: No. 003 Children of Dune Frank Herbert Science Fiction· Dune 3
+    - listitem:
+      - button "Toggle ASCII cover for God Emperor of Dune":
+        - img "God Emperor of Dune by Frank Herbert, cover"
+      - text: No. 004 God Emperor of Dune Frank Herbert Science Fiction· Dune 4
+    - listitem:
+      - button "Toggle ASCII cover for Heretics of Dune":
+        - img "Heretics of Dune by Frank Herbert, cover"
+      - text: No. 005 Heretics of Dune Frank Herbert Science Fiction· Dune 5
+    - listitem:
+      - 'button "Toggle ASCII cover for Chapterhouse: Dune"':
+        - 'img "Chapterhouse: Dune by Frank Herbert, cover"'
+      - text: "No. 006 Chapterhouse: Dune Frank Herbert Science Fiction· Dune 6"
+    - listitem:
+      - 'button "Toggle ASCII cover for George Lucas: A Life"':
+        - 'img "George Lucas: A Life by Brian Jay Jones, cover"'
+      - text: "No. 007 George Lucas: A Life Brian Jay Jones Biography"
+    - listitem:
+      - button "Toggle ASCII cover for Deep Work":
+        - img "Deep Work by Cal Newport, cover"
+      - text: No. 008 Deep Work Cal Newport Productivity
+    - listitem:
+      - button "Toggle ASCII cover for Around the World in Eighty Days":
+        - img "Around the World in Eighty Days by Jules Verne, cover"
+      - text: No. 009 Around the World in Eighty Days Jules Verne Adventure Fiction
+    - listitem:
+      - button "Toggle ASCII cover for Mastery":
+        - img "Mastery by Robert Greene, cover"
+      - text: No. 010 Mastery Robert Greene Personal Development
+    - listitem:
+      - button "Toggle ASCII cover for The Forty Rules of Love":
+        - img "The Forty Rules of Love by Elif Shafak, cover"
+      - text: No. 011 The Forty Rules of Love Elif Shafak Historical Fiction

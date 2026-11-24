@@ -1,0 +1,101 @@
+- banner:
+  - paragraph: Luqmaan Sayed
+  - paragraph: Creative web developer
+  - navigation "Primary":
+    - link "Home":
+      - /url: /
+    - link "Work":
+      - /url: /work
+    - link "Shelf":
+      - /url: /shelf
+    - link "About":
+      - /url: /about
+  - button "Index · Ctrl+K"
+- main:
+  - paragraph:
+    - link "← Work":
+      - /url: /work
+  - heading "PlanCheck" [level=1]
+  - paragraph: "2026"
+  - paragraph: A pre-submission drawing check for South African architects.
+  - paragraph:
+    - strong: My role
+    - text: · Founder, product design & development
+  - paragraph: Testing with six beta users
+  - paragraph:
+    - link "Join the PlanCheck waitlist":
+      - /url: https://plancheck.vedalken.dev/waitlist
+  - article:
+    - heading "The drawing should fail in your office, not at the counter" [level=2]
+    - paragraph: I designed and built a web app that scans South African building plans and checks them against SANS 10400 and zoning rules, so an architect sees what fails before the plan goes to council.
+    - term: Role
+    - definition: Founder, product designer and developer
+    - term: Timeline
+    - definition: 2026, ongoing
+    - term: Tools
+    - definition: Next.js, shadcn/ui, Tailwind CSS, Vercel, Supabase, Cursor cloud agents
+    - term: Team
+    - definition: Me, with Cursor coding agents and architects supplying drawings for testing
+    - heading "The problem" [level=2]
+    - paragraph: In South Africa, building plans go to the local municipality for approval, and SANS 10400 is the national rulebook they're checked against. If one item is missing, the plan comes back and the architect starts again.
+    - paragraph: PlanCheck is for the architects who prepare those plans. Many aren't CAD power users, so the product can't assume they know what a layer is. Its two jobs are to save them time and to check the plan against SANS 10400 before anyone else does.
+    - heading "Constraints" [level=2]
+    - list:
+      - listitem: SANS 10400 is copyrighted. I can't paste the standard into the app or the database.
+      - listitem: Plans arrive as PDFs, and some are scans, so the text and dimensions aren't always machine-readable.
+      - listitem: It can't pretend to be approval. A registered competent person and the owner still sign the submission.
+      - listitem: The sample drawings belong to real clients, so none of their details can appear anywhere public.
+      - listitem: One person designs and builds it.
+    - heading "Process" [level=2]
+    - heading "Research" [level=3]
+    - paragraph: I mapped SANS 10400 from Part A to Part XA into an index of parts and headings, and read the clauses that matter most on a drawing, such as window details, glass sizes and the 15% glazing limit in Part XA. I ran real plans from practising architects through the checks. I'm talking to architects in an ongoing group, and PlanCheck has 6 beta testers.
+    - figure "Testing with architects":
+      - text: Testing with architects
+      - term: "6"
+      - definition: beta testers
+      - term: PDF
+      - definition: core submission format
+      - paragraph: Early beta; no accuracy figure is claimed.
+    - heading "The pivot to PDF" [level=3]
+    - paragraph: PlanCheck started with CAD files. I moved the core flow to scanning PDFs, and it still reads DWG and DXF files. Architects use different CAD programs, but every one of them has to export the plan to PDF for submission. A PDF works for every architect, whatever software drew it.
+    - paragraph: I replaced the default PDF viewer with my own, built on the PDF support that modern browsers already have.
+    - figure "The pivot to PDF":
+      - text: The pivot to PDF
+      - list:
+        - listitem: Different CAD tools
+        - listitem: Scanned drawings
+        - listitem: Digital plans
+      - text: PDF submission
+      - paragraph: PDF is the core flow; the app can also read DWG and DXF.
+    - figure "From drawing to report":
+      - text: From drawing to report
+      - list:
+        - listitem:
+          - strong: Upload
+          - text: A drawing
+        - listitem:
+          - strong: Check
+          - text: Rules & dimensions
+        - listitem:
+          - strong: Review
+          - text: Passes & fixes
+      - paragraph: A simplified view of the workflow. The report supports the architect’s review; it is not municipal approval.
+    - heading "Key decisions" [level=3]
+    - paragraph: One upload, one answer. The architect adds a plan, and PlanCheck returns a report. Architects want a verdict, not another tool to learn.
+    - paragraph: Every fail says what to change. Each failed check names the regulation it breaks and the change to make on the drawing, with a number when there is one. Telling someone they failed isn't useful on its own. Fixing the plan is the job.
+    - paragraph: Plain words only. The interface says "drawing" and "checklist", never "MTEXT" or "layer".
+    - paragraph: "Say what it isn't. The sign-in and waitlist pages both say: \"It is not a stamp. It is not municipal approval. The competent person and the owner still sign.\" Nobody should walk away thinking software approved their plan."
+    - paragraph: Read the occupancy first. One sample wasn't a house at all. Medical offices fall under different rules, so the checks have to know what kind of building they're looking at before they run.
+    - paragraph: "The trade-off: I chose polish before opening it up. That's slower, and right for a tool people trust with their submissions."
+    - heading "What I built" [level=2]
+    - paragraph: A Next.js app on Vercel, with shadcn/ui components, built with Cursor's cloud agents.
+    - list:
+      - listitem: PDF scanning is the core flow. OCR reads scanned notes, and the app measures from dimensions on the sheet.
+      - listitem: DWG and DXF files are read too, for layers, text, dimensions and blocks.
+      - listitem: To respect the copyright, the app stores an index of SANS headings and opens the official PDF at the right page, through private storage and signed links in Supabase.
+      - listitem: Sign-in is by work email, with a waitlist for anyone not on the list yet.
+      - listitem: The sign-in page has an interactive "Reading the sheet" figure. You drag a read head, or use the arrow keys, across a drawing, and a dial shows the distance in millimetres.
+    - heading "Outcome" [level=2]
+    - paragraph: PlanCheck is live at plancheck.vedalken.dev behind sign-in, with a waitlist at /waitlist and 6 beta testers. The 24-second demo shows the flow from upload to report. It's early, and I'm not quoting accuracy figures.
+    - heading "What I learned and what's next" [level=2]
+    - paragraph: I was adding features without checking whether architects needed them. Now I use their feedback to decide what to build next.

@@ -1,0 +1,13 @@
+# Launch keyboard and accessibility follow-up
+
+The two identified homepage and mobile Index issues are fixed locally. Ready to ship: not yet verified; a live screen-reader pass and real-device checks remain outstanding.
+
+Review record: 22 November 2026; local Vite site, Chromium via Playwright, 390 × 844 and 1280 × 844; dark theme, reduced motion for the main probes. The homepage is assumed to introduce Luqmaan and make work and contact reachable. Criteria 5 (labels), 12 (content visible), 13 (focus and controls) from `/Users/Admin/.agents/skills/ui-review/references/criteria.md`.
+
+Fixes: Removed button roles and keyboard stops from the three decorative word previews; the images/videos remain decorative and pointer hover still works. At widths up to 960px the Index control is now in the header's normal flow with a 44px high target; desktop keeps its fixed placement. The dialog opens by keyboard, Escape closes it, and focus returns to the trigger in Chromium at both widths. Focused-trigger screenshots: `launch-accessibility/index-focus-390.png` and `index-focus-1280.png`.
+
+Checks: `npm run check` (0 errors, 0 warnings), `npm run build`, `git diff --check`, and guarded capture of `/`, `/work`, `/shelf`, `/about`, `/work/plancheck` at 390 and 1280 all passed. Chromium keyboard probes: navigation to Work, Shelf, About and three featured case studies; shelf category selection, reload, clear and cover toggling with Enter/Space; PlanCheck demo play/pause with Space; contact field focus and text entry with keyboard, required validation and the email link; Index opening, close, focus restoration and mobile scroll behavior. The contact form was not submitted to an external mail app. Automated axe found no violations on the homepage or shelf at either width; this is not a conformance audit. Desktop pointer hover preview appeared and disappeared.
+
+Findings still needing a person: macOS VoiceOver is present, but System Events reports UI automation disabled; no live screen-reader pass was possible in this session. Do not treat browser accessibility trees as VoiceOver results. Test with a person using VoiceOver or NVDA and on a real phone; confirm the user's mail client handoff and external links. Captures in this session used reduced motion and guarded external requests; they are not proof of normal-motion behavior, weather service, offline/error or slow-loading behavior, 200% zoom, all controls on all case-study pages, or assistive-technology announcement timing. Press latency was not measured.
+
+Coverage: home, work, shelf, about, PlanCheck visual captures at 390 and 1280; route responses for all featured and additional case studies; keyboard probes above; no live screen reader or real device.

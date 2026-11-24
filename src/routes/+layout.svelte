@@ -57,7 +57,6 @@
 		<nav aria-label="Primary">
 			<a href="/">Home</a>
 			<a href="/work">Work</a>
-			<a href="/work/for-recruiters">For recruiters</a>
 			<a href="/shelf">Shelf</a>
 			<a href="/about">About</a>
 		</nav>

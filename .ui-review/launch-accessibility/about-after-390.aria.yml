@@ -1,0 +1,78 @@
+- banner:
+  - paragraph: Luqmaan Sayed
+  - paragraph: Creative web developer
+  - navigation "Primary":
+    - link "Home":
+      - /url: /
+    - link "Work":
+      - /url: /work
+    - link "Shelf":
+      - /url: /shelf
+    - link "About":
+      - /url: /about
+  - button "Index · Ctrl+K"
+- main:
+  - heading "About" [level=1]
+  - paragraph: I’m Luqmaan, a creative web developer in Durban. I work directly with clients and enjoy taking a site from research to launch.
+  - paragraph:
+    - text: At Cerebro Creative, I lead web design and development, build AI tools and teach the team how to use them. I also build my own products, including
+    - link "PlanCheck":
+      - /url: /work/plancheck
+    - text: ", a drawing-checking app for South African architects."
+  - paragraph: I’m open to remote roles across EMEA.
+  - region "Experience":
+    - heading "Experience" [level=2]
+    - text: Open a role to explore
+    - group:
+      - text: 2025 — PRESENT
+      - strong: Cerebro Creative
+      - text: Lead web designer & developer · Head of AI systems
+      - paragraph: I design and build websites, and lead AI systems for the studio.
+      - list:
+        - listitem: Built three AI agents that together save the team 25 hours a week, including an agent that helps keep supermarket product catalogues current.
+        - listitem: Built a content repurposing system that saves two FMCG designers 20 hours a week between them.
+        - listitem:
+          - text: Researched, designed and built
+          - link "Toolmac":
+            - /url: /work/toolmac
+          - text: from end to end, reducing reported homepage load time from 12 seconds to 0.5 seconds through caching.
+        - listitem:
+          - text: Designed and built
+          - link "Bargain Xpress":
+            - /url: /work/more/bargain-xpress
+          - text: ","
+          - link "Bargain Wholesalers":
+            - /url: /work/more/bargain-wholesalers
+          - text: and
+          - link "MIP Brands":
+            - /url: /work/more/mip-brands
+          - text: with the senior director.
+      - link "Explore my work":
+        - /url: /#work
+    - group:
+      - text: JUN — NOV 2024
+      - strong: Clean Heat Academy
+      - text: Manager
+    - group:
+      - text: 2021 — 2023
+      - strong: Isibani Digital
+      - text: Junior developer
+  - region "How I work":
+    - heading "How I work" [level=2]
+    - paragraph: I like owning a project from the first conversation to launch, and improving it once people use it.
+    - text: Research Understand the people and problem Design Wireframe, prototype and refine Build Develop and launch Refine Measure and improve
+    - paragraph:
+      - strong: Tools I use
+      - text: Figma · HTML · CSS · JavaScript · TypeScript · React · Tailwind CSS · GSAP · WordPress · WooCommerce · Git · Vercel
+  - region "Education":
+    - heading "Education" [level=2]
+    - paragraph: Bachelor of Computer Application Development and Systems Management Varsity College, Durban
+  - region "Let’s connect":
+    - heading "Let’s connect" [level=2]
+    - paragraph: Looking for a creative web developer? Send me a message.
+    - link "Email":
+      - /url: mailto:hello@vedalken.dev
+    - link "LinkedIn":
+      - /url: https://www.linkedin.com/in/ml-sayed
+    - link "GitHub":
+      - /url: https://github.com/vedalkenDev

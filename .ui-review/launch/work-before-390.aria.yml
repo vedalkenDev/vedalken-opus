@@ -1,0 +1,46 @@
+- banner:
+  - paragraph: Luqmaan Sayed
+  - paragraph: Creative web developer
+  - navigation "Primary":
+    - link "Home":
+      - /url: /
+    - link "Work":
+      - /url: /work
+    - link "Shelf":
+      - /url: /shelf
+    - link "About":
+      - /url: /about
+- main:
+  - heading "Work" [level=1]
+  - list:
+    - listitem:
+      - link "Toolmac":
+        - /url: /work/toolmac
+      - text: "An online store for retail shoppers and trade buyers. Homepage load: 12 sec → 0.5 sec"
+    - listitem:
+      - link "PlanCheck":
+        - /url: /work/plancheck
+      - text: A pre-submission drawing check for South African architects. Testing with six beta users
+    - listitem:
+      - link "Cosmic Archive ASCII":
+        - /url: /work/ascii-image-generator
+      - text: "A Rust app that turns photos into glyph art on the web and desktop. Hover rendering: 19.4 ms → 2.0 ms per frame"
+  - heading "More work" [level=2]
+  - list:
+    - listitem:
+      - link "Bargain Xpress":
+        - /url: /work/more/bargain-xpress
+      - text: Designed and built a retail site in WordPress and Divi with Cerebro Creative’s senior director.
+    - listitem:
+      - link "Bargain Wholesalers":
+        - /url: /work/more/bargain-wholesalers
+      - text: Designed and built a wholesale site in WordPress and Divi with Cerebro Creative’s senior director.
+    - listitem:
+      - link "MIP Brands":
+        - /url: /work/more/mip-brands
+      - text: Designed and built the site in WordPress and Divi with Cerebro Creative’s senior director.
+    - listitem:
+      - link "AI agents and studio tools":
+        - /url: /#work
+      - text: Built internal AI agents and a content repurposing system for Cerebro Creative, including catalogue maintenance for supermarket websites.
+- button "Index · ⌘K"

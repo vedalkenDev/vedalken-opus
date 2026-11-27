@@ -7,14 +7,11 @@
 
 	let { open = $bindable(false) }: { open?: boolean } = $props();
 
-	const TRIGGER_HITS = 4;
-	const TRIGGER_WINDOW_MS = 5000;
-
 	type Result = { outcome: Outcome; score: number; reached: Reached };
 
 	/** What the visitor sees. The game simulation lives apart, in `game`. */
 	type Experience =
-		| { kind: 'closed'; hits: number[] }
+		| { kind: 'closed' }
 		| { kind: 'reveal' }
 		| { kind: 'title' }
 		| { kind: 'scores'; highlight: number }
@@ -36,12 +33,11 @@
 		Space: 'fire'
 	};
 
-	let experience = $state<Experience>({ kind: 'closed', hits: [] });
+	let experience = $state<Experience>({ kind: 'closed' });
 	let board = $state<Board>({ entries: [], persistent: true });
 	let sound = $state<SoundSettings>(soundSettings());
 	let touch = $state(false);
 	let lit = $state(false);
-	let signal = $state('');
 	let status = $state('');
 	let initials = $state('');
 	let initialsError = $state('');
@@ -50,7 +46,6 @@
 	let dialog: HTMLDialogElement | undefined;
 	let screenEl: HTMLDivElement | undefined;
 	let canvasEl: HTMLCanvasElement | undefined;
-	let pulseEl: HTMLDivElement | undefined;
 	let stickEl: HTMLDivElement | undefined;
 	let snapEl: HTMLCanvasElement | undefined = $state();
 	let cartArt: HTMLCanvasElement | undefined = $state();
@@ -73,6 +68,14 @@
 	let revealRun = 0;
 	let restore: { scrollY: number; focus: HTMLElement | null; overflow: string } | null = null;
 	const held = new Set<Held>();
+	let lastTap: { direction: Exclude<Held, 'fire'>; time: number } | null = null;
+	let pendingDash: { x: number; y: number } | undefined;
+	let stickDirection: Exclude<Held, 'fire'> | null = null;
+	function clearInput() {
+		held.clear();
+		lastTap = null;
+		pendingDash = undefined;
+	}
 	const stick = { x: 0, y: 0, id: -1, cx: 0, cy: 0, r: 1 };
 	const audio = createAudio();
 
@@ -82,38 +85,8 @@
 
 	const best = $derived(board.entries[0]);
 
-	/** Called by the helmet. Four activations inside five seconds open the arcade. */
-	export function activate(source: HTMLCanvasElement) {
-		if (experience.kind !== 'closed') return;
-		const now = performance.now();
-		const previous = experience.hits;
-		const hits = previous.length && now - previous[previous.length - 1] < TRIGGER_WINDOW_MS ? [...previous, now] : [now];
-		pulse(hits.length);
-		if (hits.length < TRIGGER_HITS) {
-			experience = { kind: 'closed', hits };
-			signal = `Signal ${hits.length} of ${TRIGGER_HITS}.`;
-			return;
-		}
-		signal = '';
-		void launch(source);
-	}
-
-	function pulse(n: number) {
-		if (!pulseEl?.animate) return;
-		pulseEl.style.setProperty('--ring', `${3 + n * 3}px`);
-		const peak = Math.min(1, 0.3 + n * 0.18);
-		const frames = reduced()
-			? [{ opacity: 0 }, { opacity: peak }, { opacity: 0 }]
-			: [
-					{ opacity: 0, filter: 'hue-rotate(0deg) blur(1px)' },
-					{ opacity: peak, filter: 'hue-rotate(70deg) blur(2px)', offset: 0.25 },
-					{ opacity: 0, filter: 'hue-rotate(160deg) blur(6px)' }
-				];
-		pulseEl.animate(frames, { duration: reduced() ? 420 : 900, easing: 'ease-out' });
-	}
-
-	async function launch(source: HTMLCanvasElement) {
-		if (!dialog) return;
+	export async function launch(source: HTMLCanvasElement) {
+		if (!dialog || experience.kind !== 'closed') return;
 		const html = document.documentElement;
 		restore = {
 			scrollY: window.scrollY,
@@ -291,7 +264,7 @@
 
 	async function toTitle() {
 		game = null;
-		held.clear();
+		clearInput();
 		releaseStick();
 		board = loadBoard();
 		experience = { kind: 'title' };
@@ -304,7 +277,7 @@
 		game = createGame((Math.random() * 2 ** 31) | 0);
 		acc = 0;
 		last = performance.now();
-		held.clear();
+		clearInput();
 		releaseStick();
 		status = 'Wave 1 of 5.';
 		experience = { kind: 'playing' };
@@ -314,7 +287,7 @@
 
 	function pause() {
 		if (experience.kind !== 'playing') return;
-		held.clear();
+		clearInput();
 		releaseStick();
 		audio.music('none');
 		experience = { kind: 'paused' };
@@ -374,9 +347,9 @@
 	function exit() {
 		if (experience.kind === 'closed') return;
 		revealRun++;
-		experience = { kind: 'closed', hits: [] };
+		experience = { kind: 'closed' };
 		game = null;
-		held.clear();
+		clearInput();
 		releaseStick();
 		audio.music('none');
 		stopLoop();
@@ -419,6 +392,14 @@
 
 	const toggleMute = () => setSound({ muted: !sound.muted });
 
+	function directionTap(direction: Exclude<Held, 'fire'>) {
+		const now = performance.now();
+		if (lastTap?.direction === direction && now - lastTap.time < 350) {
+			pendingDash = { x: direction === 'left' ? -1 : direction === 'right' ? 1 : 0, y: direction === 'up' ? -1 : direction === 'down' ? 1 : 0 };
+			lastTap = null;
+		} else lastTap = { direction, time: now };
+	}
+
 	function input(): Input {
 		let x = stick.x;
 		let y = stick.y;
@@ -457,6 +438,9 @@
 					audio.play('bossDown');
 					status = 'The Unwritten falls.';
 					break;
+				case 'power':
+					status = `${e.power === 'rapid' ? 'Rapid fire' : e.power === 'spread' ? 'Spread shot' : 'Dash'} level ${e.level}, 40 seconds.`;
+					break;
 				case 'ended':
 					audio.play(e.outcome === 'victory' ? 'victory' : 'defeat');
 					break;
@@ -475,7 +459,8 @@
 		if (x.kind === 'playing' && game) {
 			acc = Math.min(acc + dt, 0.25);
 			while (acc >= STEP) {
-				step(game, input(), STEP);
+				step(game, { ...input(), dash: pendingDash }, STEP);
+				pendingDash = undefined;
 				acc -= STEP;
 			}
 			drain(game);
@@ -563,6 +548,7 @@
 			if (!k) return;
 			e.preventDefault();
 			touch = false;
+			if (k !== 'fire' && !e.repeat && !held.has(k)) directionTap(k);
 			held.add(k);
 			return;
 		}
@@ -581,6 +567,7 @@
 		stick.x = 0;
 		stick.y = 0;
 		stick.id = -1;
+		stickDirection = null;
 		knob = { x: 0, y: 0 };
 	}
 
@@ -599,6 +586,9 @@
 		const k = m < dead ? 0 : (m - dead) / (1 - dead) / (m || 1);
 		stick.x = (dx / stick.r) * k;
 		stick.y = (dy / stick.r) * k;
+		const direction = m < 0.35 ? null : Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+		if (direction && direction !== stickDirection && stickDirection === null) directionTap(direction);
+		stickDirection = direction;
 	}
 
 	function stickDown(e: PointerEvent) {
@@ -703,9 +693,6 @@
 	{/if}
 {/snippet}
 
-<div class="pulse" bind:this={pulseEl} aria-hidden="true"></div>
-<p class="sr-only" aria-live="polite">{signal}</p>
-
 <dialog
 	bind:this={dialog}
 	class="arcade"
@@ -748,11 +735,12 @@
 					{/if}
 					<p class="hint">
 						{#if touch}
-							drag the stick to fly. fire is automatic.
+							drag to fly · fire is automatic · double-flick to dash with D.
 						{:else}
-							arrows or wasd fly · space fires · esc pauses · m mutes
+							arrows or wasd fly · space fires · double-tap to dash with D
 						{/if}
 					</p>
+					<p class="hint">collect R rapid fire · P spread shot · D dash</p>
 				</section>
 			{:else if experience.kind === 'scores'}
 				<section class="panel" aria-labelledby="arcade-scores">
@@ -897,33 +885,6 @@
 		clip-path: inset(50%);
 		white-space: nowrap;
 		border: 0;
-	}
-
-	.pulse {
-		position: fixed;
-		inset: 0;
-		z-index: 40;
-		pointer-events: none;
-		opacity: 0;
-		padding: var(--ring, 6px);
-		background: conic-gradient(
-			from 120deg,
-			var(--violet),
-			var(--blue),
-			var(--teal),
-			var(--sage),
-			var(--amber),
-			var(--coral),
-			var(--violet)
-		);
-		-webkit-mask:
-			linear-gradient(#000 0 0) content-box,
-			linear-gradient(#000 0 0);
-		-webkit-mask-composite: xor;
-		mask:
-			linear-gradient(#000 0 0) content-box,
-			linear-gradient(#000 0 0);
-		mask-composite: exclude;
 	}
 
 	.arcade {

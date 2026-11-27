@@ -39,7 +39,9 @@ const LASH_STRIKE = 0.6;
 const LASH_RETRACT = 0.5;
 
 export type Vec = { x: number; y: number };
-export type Input = { x: number; y: number; fire: boolean };
+export type Input = { x: number; y: number; fire: boolean; dash?: Vec };
+export type Power = 'rapid' | 'spread' | 'dash';
+export const POWERS: readonly Power[] = ['rapid', 'spread', 'dash'];
 export type Outcome = 'victory' | 'defeat';
 export type EnemyKind = 'drone' | 'wisp' | 'warden';
 export type WaveNumber = 1 | 2 | 3 | 4 | 5;
@@ -90,6 +92,7 @@ export type Enemy = {
 	y: number;
 	motion: EnemyMotion;
 	flash: number;
+	power?: Power;
 };
 
 export type Bullet = { x: number; y: number; vx: number; vy: number; from: 'player' | 'enemy'; spent: boolean };
@@ -148,6 +151,7 @@ export type GameEvent =
 	| { kind: 'cleared'; wave: WaveNumber; bonus: number }
 	| { kind: 'bossPhase' }
 	| { kind: 'bossDown' }
+	| { kind: 'power'; power: Power; level: number }
 	| { kind: 'ended'; outcome: Outcome };
 
 export type Game = {
@@ -160,6 +164,9 @@ export type Game = {
 	enemies: Enemy[];
 	bullets: Bullet[];
 	particles: Particle[];
+	powers: Record<Power, { level: number; remaining: number }>;
+	drops: (Vec & { power: Power })[];
+	dash: { direction: Vec; remaining: number; cooldown: number };
 	stage: Stage;
 	shake: number;
 	nextId: number;
@@ -211,6 +218,9 @@ export function createGame(seed = 1): Game {
 		enemies: [],
 		bullets: [],
 		particles: [],
+		powers: { rapid: { level: 0, remaining: 0 }, spread: { level: 0, remaining: 0 }, dash: { level: 0, remaining: 0 } },
+		drops: [],
+		dash: { direction: { x: 0, y: 0 }, remaining: 0, cooldown: 0 },
 		stage: { kind: 'banner', next: 1, t: 0 },
 		shake: 0,
 		nextId: 1,
@@ -254,6 +264,25 @@ export function tentacleSegment(boss: Boss, k: number, i: number, out: Vec): voi
 
 export function step(g: Game, input: Input, dt: number): void {
 	g.time += dt;
+	if (g.stage.kind !== 'ended') {
+		for (const power of POWERS) {
+			const effect = g.powers[power];
+			effect.remaining = Math.max(0, effect.remaining - dt);
+			if (effect.remaining === 0) effect.level = 0;
+		}
+		g.dash.cooldown = Math.max(0, g.dash.cooldown - dt);
+		for (const drop of g.drops) {
+			drop.y += 38 * dt;
+			if (g.ship.kind === 'alive' && dist2(drop, g.ship) < 14 ** 2) {
+				const effect = g.powers[drop.power];
+				effect.level = Math.min(3, effect.level + 1);
+				effect.remaining = 40;
+				g.events.push({ kind: 'power', power: drop.power, level: effect.level });
+				drop.y = H + 20;
+			}
+		}
+		g.drops = g.drops.filter((drop) => drop.y < H + 12);
+	}
 	g.shake = Math.max(0, g.shake - dt * 2.5);
 	const st = g.stage;
 	switch (st.kind) {
@@ -319,6 +348,7 @@ function begin(g: Game, next: WaveNumber | 'boss') {
 				x: a.x,
 				y: a.y,
 				flash: 0,
+				power: rand(g) < 0.3 ? POWERS[Math.floor(rand(g) * POWERS.length)] : undefined,
 				motion: {
 					kind: 'entering',
 					t: -(r * 0.7 + order * 0.11),
@@ -360,6 +390,8 @@ function waveStep(g: Game, st: Extract<Stage, { kind: 'wave' }>, dt: number) {
 }
 
 function dive(g: Game, e: Enemy, shots: number, speed: number) {
+	if (e.power === 'dash') speed *= 1.4;
+	if (e.power === 'rapid') shots += 2;
 	const side = e.x < W / 2 ? -1 : 1;
 	const sx = g.ship.x;
 	e.motion = {
@@ -411,8 +443,9 @@ function enemiesStep(g: Game, dt: number) {
 				bez(m.path, Math.min(1, u), e);
 				if (m.shots > 0 && u >= m.nextShot && g.stage.kind !== 'ended') {
 					m.shots--;
-					m.nextShot += 0.18;
+					m.nextShot += e.power === 'rapid' ? 0.10 : 0.18;
 					enemyShot(g, e.x, e.y, m.speed);
+					if (e.power === 'spread') enemyShot(g, e.x + 7, e.y, m.speed);
 				}
 				if (u < 1) break;
 				if (!e.slot) {
@@ -466,16 +499,30 @@ function shipStep(g: Game, input: Input, dt: number) {
 		ix /= m;
 		iy /= m;
 	}
-	s.x = clamp(s.x + ix * SHIP_SPEED * dt, SHIP_EDGE, W - SHIP_EDGE);
-	s.y = clamp(s.y + iy * SHIP_SPEED * dt, ZONE_TOP, ZONE_BOTTOM);
+	if (input.dash && g.powers.dash.level && g.dash.cooldown === 0) {
+		const length = Math.hypot(input.dash.x, input.dash.y);
+		if (length > 0) {
+			g.dash.direction = { x: input.dash.x / length, y: input.dash.y / length };
+			g.dash.remaining = 0.16;
+			g.dash.cooldown = 1.2 - g.powers.dash.level * 0.2;
+		}
+	}
+	const dashing = g.dash.remaining > 0;
+	const speed = dashing ? SHIP_SPEED * (2 + g.powers.dash.level * 0.35) : SHIP_SPEED;
+	s.x = clamp(s.x + (dashing ? g.dash.direction.x : ix) * speed * dt, SHIP_EDGE, W - SHIP_EDGE);
+	s.y = clamp(s.y + (dashing ? g.dash.direction.y : iy) * speed * dt, ZONE_TOP, ZONE_BOTTOM);
+	g.dash.remaining = Math.max(0, g.dash.remaining - dt);
 	s.invuln = Math.max(0, s.invuln - dt);
 	s.cooldown = Math.max(0, s.cooldown - dt);
 	if (!input.fire || s.cooldown > 0) return;
 	let mine = 0;
 	for (const b of g.bullets) if (b.from === 'player') mine++;
-	if (mine >= MAX_SHOTS) return;
-	g.bullets.push({ x: s.x, y: s.y - 14, vx: 0, vy: -SHOT_SPEED, from: 'player', spent: false });
-	s.cooldown = SHOT_COOLDOWN;
+	const spread = g.powers.spread.level;
+	if (mine >= MAX_SHOTS * (1 + spread * 2) * (1 + g.powers.rapid.level)) return;
+	for (let i = -spread; i <= spread; i++) {
+		g.bullets.push({ x: s.x, y: s.y - 14, vx: i * 38, vy: -SHOT_SPEED, from: 'player', spent: false });
+	}
+	s.cooldown = SHOT_COOLDOWN / (1 + g.powers.rapid.level * 0.35);
 	g.events.push({ kind: 'shot' });
 }
 
@@ -509,6 +556,7 @@ function shipDown(g: Game) {
 	burst(g, s.x, s.y, 'cream', 22, 80);
 	burst(g, s.x, s.y, 'coral', 14, 50);
 	g.lives--;
+	g.dash.remaining = 0;
 	g.shake = 1;
 	g.ship = { kind: 'down', x: s.x, y: s.y, t: 0 };
 	g.events.push({ kind: 'down', lives: g.lives });
@@ -523,6 +571,7 @@ function damage(g: Game, e: Enemy) {
 		return;
 	}
 	const points = POINTS[e.kind] * (e.motion.kind === 'diving' ? 2 : 1);
+	if (e.power && rand(g) < 0.5) g.drops.push({ x: e.x, y: e.y, power: e.power });
 	g.score += points;
 	burst(g, e.x, e.y, ENEMY_TONE[e.kind], 14);
 	g.events.push({ kind: 'kill', points });

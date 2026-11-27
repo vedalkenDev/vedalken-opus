@@ -82,6 +82,64 @@ test('respawn grants invulnerability', () => {
 	assert.ok(sawShield);
 });
 
+test('power pickups stack to three, refresh and expire during active play', () => {
+	const g = createGame(1);
+	for (let i = 0; i < 4; i++) {
+		g.drops.push({ x: g.ship.x, y: g.ship.y, power: 'rapid' });
+		step(g, { x: 0, y: 0, fire: false }, STEP);
+	}
+	assert.equal(g.powers.rapid.level, 3);
+	assert.equal(g.powers.rapid.remaining, 40);
+	step(g, { x: 0, y: 0, fire: false }, 20);
+	g.drops.push({ x: g.ship.x, y: g.ship.y, power: 'rapid' });
+	step(g, { x: 0, y: 0, fire: false }, STEP);
+	assert.equal(g.powers.rapid.remaining, 40);
+	step(g, { x: 0, y: 0, fire: false }, 40);
+	assert.equal(g.powers.rapid.level, 0);
+});
+
+test('spread adds projectiles and dash requires its power and respects cooldown', () => {
+	const g = createGame(1);
+	const x = g.ship.x;
+	step(g, { x: 0, y: 0, fire: false, dash: { x: 1, y: 0 } }, STEP);
+	assert.equal(g.ship.x, x);
+	g.powers.dash = { level: 1, remaining: 40 };
+	g.powers.spread = { level: 2, remaining: 40 };
+	step(g, { x: 0, y: 0, fire: true, dash: { x: 1, y: 0 } }, STEP);
+	assert.ok(g.ship.x > x);
+	assert.equal(g.bullets.filter((bullet) => bullet.from === 'player').length, 5);
+	const cooldown = g.dash.cooldown;
+	step(g, { x: 0, y: 0, fire: false, dash: { x: -1, y: 0 } }, STEP);
+	assert.ok(g.dash.cooldown < cooldown);
+	assert.equal(g.dash.direction.x, 1);
+});
+
+test('power timers keep running while the ship respawns', () => {
+	const g = createGame(1);
+	g.powers.dash = { level: 2, remaining: 20 };
+	g.ship = { kind: 'down', x: W / 2, y: ZONE_BOTTOM, t: 0 };
+	step(g, { x: 0, y: 0, fire: false }, 1.5);
+	assert.equal(g.ship.kind, 'alive');
+	assert.equal(g.powers.dash.level, 2);
+	assert.equal(g.powers.dash.remaining, 18.5);
+});
+
+test('powered enemies produce seeded drops at a roughly even rate', () => {
+	let drops = 0;
+	for (let seed = 1; seed <= 1000; seed++) {
+		const g = createGame(seed);
+		g.stage = { kind: 'wave', wave: 1, diveIn: 10 };
+		g.enemies = [{ id: 1, kind: 'drone', hp: 1, slot: null, x: 100, y: 100, flash: 0, power: 'spread', motion: { kind: 'formation' } }];
+		g.bullets.push({ x: 100, y: 100, vx: 0, vy: 0, from: 'player', spent: false });
+		step(g, { x: 0, y: 0, fire: false }, STEP);
+		if (g.drops.length) {
+			assert.equal(g.drops[0].power, 'spread');
+			drops++;
+		}
+	}
+	assert.ok(drops > 450 && drops < 550, `drops: ${drops}`);
+});
+
 const entry = (score: number, at: number, initials = 'ABC'): ScoreEntry => ({
 	initials: toInitials(initials) ?? ANONYMOUS,
 	score,

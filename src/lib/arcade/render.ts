@@ -438,8 +438,12 @@ function drawEnemies(view: View, g: Game) {
 		if (e.motion.kind === 'entering' && e.motion.t < 0) continue;
 		const gaze = gazeAt(view, e, g.ship, g.time, e.id);
 		sprite(view, e.kind, e.motion.kind === 'diving' ? 1 : frame, enemySkin(e), e.x, e.y, g.time, gaze);
+		if (e.power) text(view.ctx, powerMark[e.power], e.x, e.y - 13, powerColor[e.power], 7);
 	}
 }
+
+const powerMark = { rapid: 'R', spread: 'P', dash: 'D' } as const;
+const powerColor = { rapid: TONES.coral, spread: TONES.amber, dash: TONES.teal } as const;
 
 /** Empty slots read as faint dots so the formation stays legible as it thins. */
 function drawSlots(view: View, g: Game) {
@@ -464,6 +468,9 @@ function drawShip(view: View, g: Game) {
 
 function drawBullets(view: View, g: Game) {
 	const { ctx } = view;
+	for (const drop of g.drops) {
+		text(ctx, `[${powerMark[drop.power]}]`, drop.x, drop.y, powerColor[drop.power], 8);
+	}
 	for (const b of g.bullets) {
 		if (b.from === 'player') {
 			text(ctx, '|', b.x, b.y, TONES.teal, 9);
@@ -606,6 +613,12 @@ function drawBossBar(view: View, boss: Boss) {
 
 function drawHud(view: View, g: Game) {
 	const { ctx } = view;
+	ctx.textAlign = 'left';
+	const active = (['rapid', 'spread', 'dash'] as const).filter((power) => g.powers[power].level > 0);
+	active.forEach((power, i) => {
+		const effect = g.powers[power];
+		text(ctx, `${powerMark[power]}${effect.level} ${Math.ceil(effect.remaining)}s`, 6 + i * 62, H - 15, powerColor[power], 7);
+	});
 	ctx.textAlign = 'left';
 	text(ctx, String(g.score).padStart(6, '0'), 6, H - 4, TONES.cream, 8);
 	ctx.textAlign = 'right';

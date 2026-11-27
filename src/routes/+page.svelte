@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AgentArchive from '#lib/components/AgentArchive.svelte';
-	import Arcade from '#lib/components/Arcade.svelte';
+	import { onDestroy, tick } from 'svelte';
+	import type Arcade from '#lib/components/Arcade.svelte';
 	import Contact from '#lib/components/Contact.svelte';
 	import Helmet from '#lib/components/Helmet.svelte';
 	import Preloader from '#lib/components/Preloader.svelte';
@@ -9,6 +10,54 @@
 
 	let arcade: Arcade | undefined = $state();
 	let arcadeOpen = $state(false);
+	let ArcadeComponent: typeof import('#lib/components/Arcade.svelte').default | undefined = $state();
+	let loadingArcade = false;
+	let alive = true;
+	let hits = 0;
+	let lastHit = 0;
+	let pulse: HTMLDivElement | undefined;
+	let arcadeMessage = $state('');
+
+	onDestroy(() => { alive = false; });
+
+	async function activateHelmet(canvas: HTMLCanvasElement) {
+		if (loadingArcade || arcadeOpen) return;
+		const now = performance.now();
+		hits = now - lastHit < 5000 ? hits + 1 : 1;
+		lastHit = now;
+		if (pulse?.animate) {
+			pulse.style.setProperty('--ring', `${3 + hits * 3}px`);
+			const peak = Math.min(1, 0.3 + hits * 0.18);
+			const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			pulse.animate(reduced ? [{ opacity: 0 }, { opacity: peak }, { opacity: 0 }] : [
+				{ opacity: 0, filter: 'hue-rotate(0deg) blur(1px)' },
+				{ opacity: peak, filter: 'hue-rotate(70deg) blur(2px)', offset: 0.25 },
+				{ opacity: 0, filter: 'hue-rotate(160deg) blur(6px)' }
+			], { duration: reduced ? 420 : 900, easing: 'ease-out' });
+		}
+		if (hits < 4) {
+			arcadeMessage = `Signal ${hits} of 4.`;
+			return;
+		}
+		hits = 0;
+		loadingArcade = true;
+		arcadeMessage = 'Loading arcade.';
+		try {
+			if (!ArcadeComponent) {
+				ArcadeComponent = (await import('#lib/components/Arcade.svelte')).default;
+				await tick();
+			}
+			if (alive && arcade) {
+				arcadeMessage = '';
+				loadingArcade = false;
+				await arcade.launch(canvas);
+			}
+		} catch {
+			if (alive) arcadeMessage = 'Could not load the arcade. Click the helmet four times to try again.';
+		} finally {
+			loadingArcade = false;
+		}
+	}
 </script>
 
 <Preloader />
@@ -17,7 +66,7 @@
 	<p>I design and build websites in Durban, from first sketch to launch. I’m also building <a class="intro-link" href="/work/plancheck">PlanCheck</a>, a tool for checking architectural drawings against SANS 10400.</p>
 	<p>This is my <WordVideo src="/videos/cosmic-archive.mp4">cosmic archive</WordVideo> of websites, <WordVideo src="/work/ascii-image-generator/cells-80-columns.webp" image project>interfaces</WordVideo> and <WordVideo src="/videos/plancheck-preview.mp4" poster="/videos/plancheck-preview.webp" project>motion</WordVideo>.</p>
 </section>
-<section class="hero" aria-label="ASCII helmet"><Helmet onactivate={(canvas) => arcade?.activate(canvas)} asleep={arcadeOpen} /></section>
+<section class="hero" aria-label="ASCII helmet"><Helmet onactivate={activateHelmet} asleep={arcadeOpen} /></section>
 
 <section id="work">
 	<h2>Projects</h2>
@@ -56,9 +105,34 @@
 
 <Contact />
 
-<Arcade bind:this={arcade} bind:open={arcadeOpen} />
+<div class="arcade-pulse" bind:this={pulse} aria-hidden="true"></div>
+<p class="arcade-status" aria-live="polite">{arcadeMessage}</p>
+{#if ArcadeComponent}
+	<ArcadeComponent bind:this={arcade} bind:open={arcadeOpen} />
+{/if}
 
 <style>
+	.arcade-pulse {
+		position: fixed;
+		inset: 0;
+		z-index: 40;
+		pointer-events: none;
+		opacity: 0;
+		padding: var(--ring, 6px);
+		background: conic-gradient(from 120deg, var(--violet), var(--blue), var(--teal), var(--sage), var(--amber), var(--coral), var(--violet));
+		-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+		-webkit-mask-composite: xor;
+		mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+		mask-composite: exclude;
+	}
+	.arcade-status {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
 	.hero { margin-bottom: 0; }
 	#about + .hero { margin-top: .5rem; }
 	.hero + #work { margin-top: -1.25rem; }

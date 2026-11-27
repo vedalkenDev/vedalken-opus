@@ -1,10 +1,14 @@
 <script lang="ts">
 	import AgentArchive from '#lib/components/AgentArchive.svelte';
+	import Arcade from '#lib/components/Arcade.svelte';
 	import Contact from '#lib/components/Contact.svelte';
 	import Helmet from '#lib/components/Helmet.svelte';
 	import Preloader from '#lib/components/Preloader.svelte';
 	import WordVideo from '#lib/components/WordVideo.svelte';
 	import { projects } from '#lib/projects.ts';
+
+	let arcade: Arcade | undefined = $state();
+	let arcadeOpen = $state(false);
 </script>
 
 <Preloader />
@@ -13,7 +17,7 @@
 	<p>I design and build websites in Durban, from first sketch to launch. I’m also building <a class="intro-link" href="/work/plancheck">PlanCheck</a>, a tool for checking architectural drawings against SANS 10400.</p>
 	<p>This is my <WordVideo src="/videos/cosmic-archive.mp4">cosmic archive</WordVideo> of websites, <WordVideo src="/work/ascii-image-generator/cells-80-columns.webp" image project>interfaces</WordVideo> and <WordVideo src="/videos/plancheck-preview.mp4" poster="/videos/plancheck-preview.webp" project>motion</WordVideo>.</p>
 </section>
-<section class="hero" aria-label="ASCII helmet"><Helmet /></section>
+<section class="hero" aria-label="ASCII helmet"><Helmet onactivate={(canvas) => arcade?.activate(canvas)} asleep={arcadeOpen} /></section>
 
 <section id="work">
 	<h2>Projects</h2>
@@ -51,6 +55,8 @@
 </section>
 
 <Contact />
+
+<Arcade bind:this={arcade} bind:open={arcadeOpen} />
 
 <style>
 	.hero { margin-bottom: 0; }

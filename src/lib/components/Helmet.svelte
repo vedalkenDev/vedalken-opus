@@ -83,6 +83,17 @@
 		{ x: 0.44, y: 0.18, h: 0.24, delay: 0.3 }
 	];
 
+	let {
+		onactivate,
+		asleep = false
+	}: {
+		/** Gives the page a hook on helmet presses. Without it the helmet stays purely decorative. */
+		onactivate?: (canvas: HTMLCanvasElement) => void;
+		/** Stops the draw loop while something covers the helmet. */
+		asleep?: boolean;
+	} = $props();
+
+	let wake: (() => void) | undefined;
 	let cue = $state<WeatherCue | null>(null);
 	let stage: HTMLDivElement | undefined;
 	let home: HTMLDivElement | undefined;
@@ -510,7 +521,7 @@
 		const kick = () => {
 			if (raf === 0) raf = requestAnimationFrame(draw);
 		};
-
+		wake = kick;
 
 		const armReveal = () => {
 			if (revealAt !== 0) return;
@@ -768,7 +779,7 @@
 
 			// Reduced motion renders a still frame: nothing changes until resize or weather.
 			// Off screen there is nothing to see; the observer restarts the loop.
-			if (!reduce.matches && onScreen) raf = requestAnimationFrame(draw);
+			if (!reduce.matches && onScreen && !asleep) raf = requestAnimationFrame(draw);
 			else prevNow = 0;
 		}
 
@@ -849,13 +860,21 @@
 			window.removeEventListener('pointermove', move);
 			window.removeEventListener('pointerdown', down);
 			document.documentElement.removeEventListener('mouseleave', rest);
+			wake = undefined;
 		};
+	});
+
+	$effect(() => {
+		if (!asleep) wake?.();
 	});
 </script>
 
 <div bind:this={home} class="home" style:aspect-ratio="{COLS * CELL_W} / {ROWS * CELL_H}">
 	<div bind:this={stage} class="stage" class:docked class:moving>
 		<canvas bind:this={canvas} class="helmet" aria-hidden="true"></canvas>
+		{#if onactivate}
+			<button type="button" class="activate" aria-label="Helmet" onclick={() => canvas && onactivate(canvas)}></button>
+		{/if}
 	</div>
 </div>
 
@@ -904,5 +923,23 @@
 		display: block;
 		width: 100%;
 		height: auto;
+	}
+
+	.activate {
+		position: absolute;
+		inset: 8% 14%;
+		padding: 0;
+		border: 0;
+		border-radius: 40%;
+		background: none;
+		pointer-events: auto;
+		cursor: default;
+		touch-action: manipulation;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.activate:focus-visible {
+		outline: 1px dashed var(--teal);
+		outline-offset: 4px;
 	}
 </style>
